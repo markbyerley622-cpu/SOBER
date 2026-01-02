@@ -1,0 +1,364 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Import Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+:root {
+  --sober-blue: #00D4FF;
+  --sober-blue-light: #4FACFE;
+  --sober-blue-dark: #1E3A5F;
+  --sober-green: #22C55E;
+  --sober-orange: #F97316;
+  --sober-gold: #FBBF24;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #0F172A 100%);
+  min-height: 100vh;
+  color: white;
+  overflow-x: hidden;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1E293B;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #4FACFE;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #00D4FF;
+}
+
+/* Glass morphism effect */
+@layer components {
+  .glass {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .glass-dark {
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  /* Gradient text */
+  .gradient-text {
+    background: linear-gradient(135deg, #00D4FF 0%, #4ADE80 50%, #FBBF24 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .gradient-text-blue {
+    background: linear-gradient(135deg, #4FACFE 0%, #00D4FF 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .gradient-text-orange {
+    background: linear-gradient(135deg, #F97316 0%, #FBBF24 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Solana gradient */
+  .gradient-solana {
+    background: linear-gradient(135deg, #14F195 0%, #9945FF 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Gradient borders */
+  .gradient-border {
+    position: relative;
+    background: linear-gradient(135deg, #0F172A, #1E293B);
+    border-radius: 1rem;
+  }
+
+  .gradient-border::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    padding: 2px;
+    border-radius: 1rem;
+    background: linear-gradient(135deg, #00D4FF, #22C55E, #FBBF24);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+  }
+
+  /* Button styles */
+  .btn-primary {
+    @apply px-6 py-3 bg-gradient-to-r from-sober-blue to-sober-blue-light text-white font-semibold rounded-xl;
+    @apply hover:shadow-lg hover:shadow-sober-blue/30 transition-all duration-300;
+    @apply active:scale-95;
+  }
+
+  .btn-secondary {
+    @apply px-6 py-3 bg-transparent border-2 border-sober-blue text-sober-blue font-semibold rounded-xl;
+    @apply hover:bg-sober-blue/10 transition-all duration-300;
+    @apply active:scale-95;
+  }
+
+  .btn-gold {
+    @apply px-6 py-3 bg-gradient-to-r from-sober-gold to-sober-orange text-sober-blue-darker font-bold rounded-xl;
+    @apply hover:shadow-lg hover:shadow-sober-gold/30 transition-all duration-300;
+    @apply active:scale-95;
+  }
+
+  /* Solana button */
+  .btn-solana {
+    @apply px-6 py-3 font-bold rounded-xl;
+    background: linear-gradient(135deg, #14F195 0%, #9945FF 100%);
+    color: white;
+    @apply hover:shadow-lg hover:shadow-purple-500/30 transition-all duration-300;
+    @apply active:scale-95;
+  }
+
+  /* Card styles */
+  .card {
+    @apply bg-sober-blue-darker/50 backdrop-blur-sm rounded-2xl border border-white/10;
+    @apply hover:border-sober-blue/30 transition-all duration-300;
+  }
+
+  .card-hover {
+    @apply hover:transform hover:-translate-y-1 hover:shadow-xl hover:shadow-sober-blue/10;
+  }
+
+  /* Glow effects */
+  .glow-blue {
+    box-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+  }
+
+  .glow-green {
+    box-shadow: 0 0 30px rgba(34, 197, 94, 0.3);
+  }
+
+  .glow-gold {
+    box-shadow: 0 0 30px rgba(251, 191, 36, 0.3);
+  }
+
+  .glow-solana {
+    box-shadow: 0 0 30px rgba(153, 69, 255, 0.3);
+  }
+}
+
+/* Animations */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* Live feed animation */
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.8);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+.pulse-ring::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: currentColor;
+  animation: pulse-ring 1.5s ease-out infinite;
+}
+
+/* ============================================
+   SOLANA WALLET ADAPTER OVERRIDES
+   ============================================ */
+
+/* Modal Backdrop */
+.wallet-adapter-modal-overlay {
+  background: rgba(0, 0, 0, 0.8) !important;
+  backdrop-filter: blur(8px) !important;
+}
+
+/* Modal Wrapper - Main container */
+.wallet-adapter-modal-wrapper {
+  background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 1.5rem !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
+  max-width: 400px !important;
+  padding: 2rem !important;
+}
+
+/* Modal Title */
+.wallet-adapter-modal-title {
+  color: white !important;
+  font-size: 1.25rem !important;
+  font-weight: 700 !important;
+  text-align: center !important;
+  margin-bottom: 1.5rem !important;
+}
+
+/* Close button */
+.wallet-adapter-modal-button-close {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-radius: 0.5rem !important;
+  padding: 0.5rem !important;
+  transition: all 0.2s !important;
+}
+
+.wallet-adapter-modal-button-close:hover {
+  background: rgba(255, 255, 255, 0.2) !important;
+}
+
+.wallet-adapter-modal-button-close svg {
+  fill: white !important;
+}
+
+/* Wallet List */
+.wallet-adapter-modal-list {
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
+}
+
+.wallet-adapter-modal-list li {
+  margin-bottom: 0.75rem !important;
+}
+
+/* Wallet Buttons in Modal */
+.wallet-adapter-modal-list .wallet-adapter-button {
+  width: 100% !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 1rem !important;
+  padding: 1rem 1.25rem !important;
+  color: white !important;
+  font-weight: 600 !important;
+  transition: all 0.2s !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 1rem !important;
+}
+
+.wallet-adapter-modal-list .wallet-adapter-button:hover {
+  background: rgba(0, 212, 255, 0.1) !important;
+  border-color: rgba(0, 212, 255, 0.3) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* Wallet Icon */
+.wallet-adapter-button-start-icon {
+  width: 32px !important;
+  height: 32px !important;
+  margin-right: 0 !important;
+}
+
+.wallet-adapter-button-start-icon img {
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 8px !important;
+}
+
+/* Detected badge */
+.wallet-adapter-modal-list .wallet-adapter-button span {
+  margin-left: auto !important;
+  background: linear-gradient(135deg, #14F195 0%, #9945FF 100%) !important;
+  color: white !important;
+  padding: 0.25rem 0.75rem !important;
+  border-radius: 9999px !important;
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
+}
+
+/* Main connect button (in header) */
+.wallet-adapter-button-trigger {
+  background: linear-gradient(135deg, #00D4FF 0%, #4FACFE 100%) !important;
+  border: none !important;
+  border-radius: 0.75rem !important;
+  padding: 0.75rem 1.5rem !important;
+  font-weight: 600 !important;
+  transition: all 0.2s !important;
+}
+
+.wallet-adapter-button-trigger:hover {
+  box-shadow: 0 10px 25px rgba(0, 212, 255, 0.3) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* Connected state button */
+.wallet-adapter-button[data-state="connected"] {
+  background: rgba(34, 197, 94, 0.1) !important;
+  border: 1px solid rgba(34, 197, 94, 0.3) !important;
+}
+
+/* Collapse button (more wallets) */
+.wallet-adapter-modal-list-more {
+  color: #00D4FF !important;
+  background: transparent !important;
+}
+
+.wallet-adapter-modal-list-more svg {
+  fill: #00D4FF !important;
+}
+
+/* Hide "More options" if only Phantom */
+.wallet-adapter-collapse {
+  display: none !important;
+}
+
+/* Hide MetaMask wallet from modal - target by icon alt text */
+.wallet-adapter-modal-list li:has(img[alt="MetaMask icon"]) {
+  display: none !important;
+}
+
+/* Fallback for browsers that don't support :has() */
+.wallet-adapter-modal-list li button img[alt="MetaMask icon"] {
+  display: none !important;
+}
+.wallet-adapter-modal-list li button:has(img[alt="MetaMask icon"]) {
+  display: none !important;
+}
