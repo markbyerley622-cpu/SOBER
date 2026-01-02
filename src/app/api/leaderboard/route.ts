@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { ApiResponse, LeaderboardResponse, LeaderboardEntry } from '@/types';
 
-const ADMIN_API_URL = process.env.NEXT_PUBLIC_ADMIN_API_URL || 'http://localhost:4000/api/v1';
+const ADMIN_API_URL = process.env.NEXT_PUBLIC_ADMIN_API_URL || 'https://admindashboardsober.onrender.com/api/v1';
 
 // GET /api/leaderboard - Fetch leaderboard data from admin server
 export async function GET(request: NextRequest) {

@@ -6,7 +6,7 @@ import { NextResponse } from 'next/server';
 import { globalStatsCache, recentActivity } from '@/lib/webhook-store';
 import { TASKS } from '@/data/tasks';
 
-const ADMIN_API_URL = process.env.NEXT_PUBLIC_ADMIN_API_URL || 'http://localhost:4000/api/v1';
+const ADMIN_API_URL = process.env.NEXT_PUBLIC_ADMIN_API_URL || 'https://admindashboardsober.onrender.com/api/v1';
 
 // Calculate total available rewards from all tasks
 const totalAvailableRewards = TASKS.reduce((sum, task) => sum + task.rewardAmount, 0);

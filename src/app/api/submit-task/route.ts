@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
 import { TASKS } from '@/data/tasks';
 
-const ADMIN_API_URL = process.env.NEXT_PUBLIC_ADMIN_API_URL || 'http://localhost:4000/api/v1';
+const ADMIN_API_URL = process.env.NEXT_PUBLIC_ADMIN_API_URL || 'https://admindashboardsober.onrender.com/api/v1';
 const API_SECRET = process.env.ADMIN_API_SECRET || 'your-webhook-secret-16-chars';
 
 // Cache for admin server task mappings (frontendId -> adminUUID)
