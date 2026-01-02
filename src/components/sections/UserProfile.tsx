@@ -70,7 +70,7 @@ const UserProfile: React.FC = () => {
                 <div className="flex items-center gap-1 justify-center">
                   <SolanaLogo size={20} />
                   <span className="text-2xl font-bold gradient-solana">
-                    {formatSOL(userStats?.totalRewards || 0)}
+                    {formatSOL(userStats?.totalRewardsEarned || 0)}
                   </span>
                 </div>
                 <div className="text-gray-400 text-xs">Earned</div>
