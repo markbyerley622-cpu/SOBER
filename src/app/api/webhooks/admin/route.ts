@@ -4,39 +4,14 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
+import {
+  statusUpdates,
+  globalStatsCache,
+  updateGlobalStats,
+  recentActivity
+} from '@/lib/webhook-store';
 
 const WEBHOOK_SECRET = process.env.ADMIN_WEBHOOK_SECRET || 'your-webhook-secret-16-chars';
-
-// In-memory store for real-time updates (in production, use Redis or similar)
-// This will be accessed by SSE endpoints
-export const statusUpdates: Map<string, {
-  submissionId: string;
-  status: string;
-  walletAddress: string;
-  taskName: string;
-  rewardAmount: string;
-  rejectionReason?: string;
-  timestamp: Date;
-}> = new Map();
-
-// Global stats cache (updated by webhooks)
-export let globalStatsCache = {
-  totalTasksCompleted: 0,
-  totalRewardsDistributed: 0,
-  activeUsers: 0,
-  lastUpdated: new Date(),
-};
-
-// Recent activity for live feed
-export const recentActivity: Array<{
-  id: string;
-  type: string;
-  walletAddress: string;
-  taskName: string;
-  rewardAmount: number;
-  timestamp: Date;
-  txHash?: string; // Solscan transaction hash
-}> = [];
 
 function verifyWebhookSignature(payload: string, signature: string): boolean {
   const expected = crypto
@@ -96,9 +71,10 @@ export async function POST(request: NextRequest) {
         });
 
         // Update global stats
-        globalStatsCache.totalTasksCompleted++;
-        globalStatsCache.totalRewardsDistributed += parseFloat(data.rewardAmount || '0');
-        globalStatsCache.lastUpdated = new Date();
+        updateGlobalStats({
+          totalTasksCompleted: globalStatsCache.totalTasksCompleted + 1,
+          totalRewardsDistributed: globalStatsCache.totalRewardsDistributed + parseFloat(data.rewardAmount || '0'),
+        });
 
         // Add to activity feed
         recentActivity.unshift({

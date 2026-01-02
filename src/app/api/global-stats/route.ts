@@ -3,7 +3,7 @@
 // =============================================================================
 
 import { NextResponse } from 'next/server';
-import { globalStatsCache, recentActivity } from '../webhooks/admin/route';
+import { globalStatsCache, recentActivity } from '@/lib/webhook-store';
 import { TASKS } from '@/data/tasks';
 
 const ADMIN_API_URL = process.env.NEXT_PUBLIC_ADMIN_API_URL || 'http://localhost:4000/api/v1';
