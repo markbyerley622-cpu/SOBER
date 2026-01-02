@@ -357,7 +357,7 @@ const ProofUploadModal: React.FC = () => {
               isSubmitting ||
               (selectedTask.proofType === 'image' && proofMethod === 'image' && !proofFile) ||
               (selectedTask.proofType === 'image' && proofMethod === 'xlink' && !xPostUrl) ||
-              (proofMethod === 'xlink' && xPostUrl && !/^https?:\/\/(twitter\.com|x\.com)\/\w+\/status\/\d+/i.test(xPostUrl))
+              (proofMethod === 'xlink' && !!xPostUrl && !/^https?:\/\/(twitter\.com|x\.com)\/\w+\/status\/\d+/i.test(xPostUrl))
             }
           >
             Submit for Verification
