@@ -26,12 +26,16 @@ async function getAdminTaskId(frontendTaskId: string): Promise<string | null> {
 
   // Use cache if valid (5 minute TTL)
   if (taskIdCache && now < cacheExpiry) {
-    return taskIdCache.get(frontendTaskId) || null;
+    const cached = taskIdCache.get(frontendTaskId);
+    console.log('[getAdminTaskId] Using cached ID:', cached, 'for', frontendTaskId);
+    return cached || null;
   }
 
   try {
+    console.log('[getAdminTaskId] Fetching tasks from:', `${ADMIN_API_URL}/public/tasks`);
+
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 5000); // 5s timeout
+    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s timeout
 
     // Fetch tasks from admin server
     const response = await fetch(`${ADMIN_API_URL}/public/tasks`, {
@@ -41,13 +45,18 @@ async function getAdminTaskId(frontendTaskId: string): Promise<string | null> {
     });
     clearTimeout(timeoutId);
 
+    console.log('[getAdminTaskId] Response status:', response.status);
+
     if (!response.ok) {
-      console.error('Failed to fetch admin tasks:', response.status);
+      console.error('Failed to fetch admin tasks:', response.status, await response.text());
       return null;
     }
 
     const data = await response.json();
+    console.log('[getAdminTaskId] Response data keys:', Object.keys(data));
+
     const adminTasks = data.data?.tasks || data.tasks || [];
+    console.log('[getAdminTaskId] Found', adminTasks.length, 'admin tasks');
 
     // Build mapping by matching task titles
     taskIdCache = new Map();
@@ -59,19 +68,24 @@ async function getAdminTaskId(frontendTaskId: string): Promise<string | null> {
       );
       if (frontendTask && adminTask.id) {
         taskIdCache.set(frontendTask.id, adminTask.id);
+        console.log('[getAdminTaskId] Mapped:', frontendTask.id, '->', adminTask.id);
       }
     }
 
     cacheExpiry = now + 5 * 60 * 1000; // 5 minutes
-    return taskIdCache.get(frontendTaskId) || null;
+    const result = taskIdCache.get(frontendTaskId);
+    console.log('[getAdminTaskId] Result for', frontendTaskId, ':', result);
+    return result || null;
   } catch (error) {
-    console.error('Error fetching admin tasks:', error);
+    console.error('[getAdminTaskId] Error fetching admin tasks:', error);
     return null;
   }
 }
 
 export async function POST(request: NextRequest) {
   try {
+    console.log('[submit-task] Starting submission...');
+
     const formData = await request.formData();
     const walletAddress = formData.get('walletAddress') as string;
     const taskId = formData.get('taskId') as string;
@@ -80,7 +94,10 @@ export async function POST(request: NextRequest) {
     const file = formData.get('file') as File | null;
     const xPostUrl = formData.get('xPostUrl') as string | null; // X/Twitter post link
 
+    console.log('[submit-task] Form data:', { walletAddress: walletAddress?.slice(0, 10), taskId, proofType, hasFile: !!file, xPostUrl });
+
     if (!walletAddress || !taskId) {
+      console.log('[submit-task] Missing required fields');
       return NextResponse.json(
         { success: false, error: 'Missing required fields' },
         { status: 400 }
@@ -88,8 +105,12 @@ export async function POST(request: NextRequest) {
     }
 
     // Look up the admin server task UUID
+    console.log('[submit-task] Looking up admin task ID for:', taskId);
     const adminTaskId = await getAdminTaskId(taskId);
+    console.log('[submit-task] Admin task ID:', adminTaskId);
+
     if (!adminTaskId) {
+      console.log('[submit-task] Task not found on server');
       return NextResponse.json(
         { success: false, error: 'Task not found on server. Please try again later.' },
         { status: 400 }
@@ -273,9 +294,10 @@ export async function POST(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error('Submit task error:', error);
+    console.error('[submit-task] Error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     return NextResponse.json(
-      { success: false, error: 'Internal server error' },
+      { success: false, error: `Submission error: ${errorMessage}` },
       { status: 500 }
     );
   }
