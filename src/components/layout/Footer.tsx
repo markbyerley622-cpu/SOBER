@@ -13,11 +13,11 @@ const Footer: React.FC = () => {
           {/* Brand */}
           <div className="col-span-1 md:col-span-2">
             <Image
-              src="/logo-removebg-preview.png"
+              src="/logo-removebg-preview (1).png"
               alt="SOBER MADE FUN"
-              width={180}
-              height={65}
-              className="h-16 w-auto mb-4"
+              width={200}
+              height={80}
+              className="h-20 w-auto mb-4 drop-shadow-[0_0_10px_rgba(20,241,149,0.3)]"
             />
             <p className="text-gray-400 max-w-md text-sm sm:text-base">
               Web3-powered motivation to crush your New Year goals. Complete tasks, earn{' '}

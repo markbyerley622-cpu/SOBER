@@ -28,27 +28,31 @@ const UserProfile: React.FC = () => {
     <section id="profile" className="py-12 relative">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Profile Header */}
-        <Card variant="gradient" className="mb-6">
+        <Card variant="gradient" className="mb-6 overflow-hidden">
           <div className="flex flex-col sm:flex-row items-center gap-6">
-            {/* Avatar */}
-            <div className="w-20 h-20 rounded-full bg-gradient-to-r from-[#14F195] to-[#9945FF] flex items-center justify-center">
+            {/* Avatar - Friendly Mascot */}
+            <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-[#14F195]/20 to-[#9945FF]/20 flex items-center justify-center border-2 border-[#14F195]/30 shadow-lg">
               <Image
-                src="/Screenshot_2026-01-01_230537-removebg-preview.png"
-                alt="Profile"
-                width={64}
-                height={64}
-                className="rounded-full"
+                src="/photo_2026-01-02_23-57-58-removebg-preview.png"
+                alt="Your SOBER Profile"
+                width={80}
+                height={80}
+                className="object-contain"
               />
             </div>
 
             {/* User Info */}
             <div className="flex-1 text-center sm:text-left">
-              <h2 className="text-2xl font-bold text-white mb-1">Your Profile</h2>
+              <h2 className="text-2xl font-bold text-white mb-1 flex items-center justify-center sm:justify-start gap-2">
+                Welcome, Champ!
+                <span className="text-2xl">💪</span>
+              </h2>
               <div className="flex items-center justify-center sm:justify-start gap-2">
-                <div className="w-2 h-2 bg-sober-green rounded-full"></div>
+                <div className="w-2 h-2 bg-sober-green rounded-full animate-pulse"></div>
                 <span className="text-gray-400 font-mono text-sm">
                   {shortenAddress(walletAddress)}
                 </span>
+                <Badge variant="success" size="sm">Connected</Badge>
               </div>
             </div>
 
@@ -241,19 +245,19 @@ const UserProfile: React.FC = () => {
         {userTasks.length === 0 && (
           <Card variant="glass" className="text-center py-12">
             <Image
-              src="/meditate_-removebg-preview.png"
-              alt="No tasks"
-              width={100}
-              height={100}
-              className="mx-auto mb-4 opacity-50"
+              src="/photo_2026-01-02_23-57-58-removebg-preview.png"
+              alt="Start your journey"
+              width={150}
+              height={150}
+              className="mx-auto mb-4"
             />
-            <h3 className="text-xl font-semibold text-white mb-2">No Tasks Yet</h3>
+            <h3 className="text-xl font-semibold text-white mb-2">Ready to Get Started? 💪</h3>
             <p className="text-gray-400 mb-4">
-              Start your sobriety journey by completing your first task!
+              You&apos;re one step away from earning rewards! Complete your first task and join the SOBER community.
             </p>
             <button
               onClick={() => document.getElementById('tasks')?.scrollIntoView({ behavior: 'smooth' })}
-              className="text-sober-blue hover:text-sober-blue-light transition-colors font-medium"
+              className="bg-gradient-to-r from-[#14F195] to-[#9945FF] text-white px-6 py-2 rounded-lg font-medium hover:opacity-90 transition-opacity"
             >
               Browse Tasks →
             </button>

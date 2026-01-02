@@ -130,7 +130,7 @@ export const TASKS: Task[] = [
     proofType: 'referral',
     status: 'available',
     completedCount: 567,
-    icon: '/good winning.jpg',
+    icon: '/community.jpg',
   },
   {
     id: 'community-share-story',
@@ -142,7 +142,7 @@ export const TASKS: Task[] = [
     proofType: 'image',
     status: 'available',
     completedCount: 789,
-    icon: '/good winning.jpg',
+    icon: '/community.jpg',
   },
 
   // Accountability Tasks
