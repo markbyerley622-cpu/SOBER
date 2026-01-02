@@ -97,38 +97,30 @@ const Community: React.FC = () => {
             </div>
           </div>
 
-          {/* Right Column - Image */}
+          {/* Right Column - Community Image */}
           <div className="relative flex justify-center">
             <div className="relative">
-              {/* Community Background Image */}
-              <div className="absolute inset-0 -m-8 rounded-3xl overflow-hidden">
+              {/* Glow effect */}
+              <div className="absolute inset-0 bg-gradient-to-r from-[#14F195]/30 via-[#9945FF]/20 to-sober-gold/30 rounded-3xl blur-3xl scale-95" />
+
+              {/* Community Image - Giraffe with Friends */}
+              <div className="relative rounded-3xl overflow-hidden border-2 border-[#14F195]/20 shadow-2xl">
                 <Image
                   src="/community.jpg"
-                  alt="SOBER Community Background"
-                  fill
-                  className="object-cover opacity-30"
+                  alt="SOBER Community - Giraffe with Friends"
+                  width={450}
+                  height={350}
+                  className="relative z-10"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-sober-blue-darker via-transparent to-sober-blue-darker/50" />
               </div>
 
-              {/* Glow */}
-              <div className="absolute inset-0 bg-gradient-to-r from-[#14F195]/20 via-[#9945FF]/20 to-sober-gold/20 rounded-full blur-3xl scale-90" />
-
-              <Image
-                src="/photo_2026-01-02_23-47-12-removebg-preview.png"
-                alt="SOBER Mascot - Fitness Giraffe"
-                width={420}
-                height={420}
-                className="relative z-10 animate-float drop-shadow-[0_0_30px_rgba(20,241,149,0.3)]"
-              />
-
               {/* Floating elements */}
-              <div className="absolute top-5 left-0 bg-sober-blue-darker/90 backdrop-blur-sm px-4 py-2 rounded-xl border border-[#14F195]/30 shadow-lg animate-bounce">
+              <div className="absolute -top-4 -left-4 bg-sober-blue-darker/95 backdrop-blur-sm px-4 py-2 rounded-xl border border-[#14F195]/30 shadow-lg z-20">
                 <span className="text-sober-green">✓</span>
                 <span className="text-gray-300 text-sm ml-2">12.8K members</span>
               </div>
 
-              <div className="absolute bottom-10 right-0 bg-sober-blue-darker/90 backdrop-blur-sm px-4 py-2 rounded-xl border border-[#9945FF]/30 shadow-lg animate-bounce delay-150">
+              <div className="absolute -bottom-4 -right-4 bg-sober-blue-darker/95 backdrop-blur-sm px-4 py-2 rounded-xl border border-[#9945FF]/30 shadow-lg z-20">
                 <span className="text-lg">💪</span>
                 <span className="text-gray-300 text-sm ml-2">Stronger together</span>
               </div>

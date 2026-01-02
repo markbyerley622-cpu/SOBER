@@ -15,21 +15,6 @@ const Hero: React.FC = () => {
 
   return (
     <section className="relative min-h-screen flex items-center pt-24 overflow-hidden">
-      {/* Hero Banner Background - Mobile & Desktop Optimized */}
-      <div className="absolute inset-0 z-0">
-        <Image
-          src="/banner.jpg"
-          alt="SOBER MADE FUN Banner"
-          fill
-          className="object-cover object-center opacity-40 sm:opacity-50"
-          sizes="100vw"
-          priority
-        />
-        {/* Gradient overlay for readability while keeping banner visible */}
-        <div className="absolute inset-0 bg-gradient-to-b from-sober-blue-darker/60 via-sober-blue-darker/70 to-sober-blue-darker/90" />
-        <div className="absolute inset-0 bg-gradient-to-r from-sober-blue-darker/50 via-transparent to-sober-blue-darker/50" />
-      </div>
-
       {/* Background gradient orbs */}
       <div className="absolute top-20 left-10 w-72 h-72 bg-sober-blue/20 rounded-full blur-3xl" />
       <div className="absolute bottom-20 right-10 w-96 h-96 bg-[#9945FF]/10 rounded-full blur-3xl" />
