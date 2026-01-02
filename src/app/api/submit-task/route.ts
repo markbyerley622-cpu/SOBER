@@ -20,19 +20,19 @@ function createSignature(payload: string): string {
     .digest('hex');
 }
 
-// Retry fetch with exponential backoff (handles Render cold starts)
+// Retry fetch with shorter timeout for Vercel's 10s limit
 async function fetchWithRetry(
   url: string,
   options: RequestInit,
-  maxRetries = 3,
-  initialDelay = 2000
+  maxRetries = 2,
+  initialDelay = 500
 ): Promise<Response> {
   let lastError: Error | null = null;
 
   for (let attempt = 0; attempt < maxRetries; attempt++) {
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30s timeout for cold starts
+      const timeoutId = setTimeout(() => controller.abort(), 8000); // 8s timeout (Vercel has 10s limit)
 
       const response = await fetch(url, {
         ...options,
@@ -204,7 +204,7 @@ export async function POST(request: NextRequest) {
       } catch (fetchError) {
         console.error('[submit-task] Fetch error on confirm:', fetchError);
         return NextResponse.json(
-          { success: false, error: `Admin server unavailable. Please try again in 30 seconds (server may be waking up).` },
+          { success: false, error: `Server is starting up. Please wait 30 seconds and try again.` },
           { status: 503 }
         );
       }
@@ -259,7 +259,7 @@ export async function POST(request: NextRequest) {
       } catch (fetchError) {
         console.error('[submit-task] X post submission error:', fetchError);
         return NextResponse.json(
-          { success: false, error: 'Admin server unavailable. Please try again in 30 seconds.' },
+          { success: false, error: 'Server is starting up. Please wait 30 seconds and try again.' },
           { status: 503 }
         );
       }
@@ -359,7 +359,7 @@ export async function POST(request: NextRequest) {
     } catch (fetchError) {
       console.error('[submit-task] File upload error:', fetchError);
       return NextResponse.json(
-        { success: false, error: 'Admin server unavailable. Please try again in 30 seconds.' },
+        { success: false, error: 'Server is starting up. Please wait 30 seconds and try again.' },
         { status: 503 }
       );
     }

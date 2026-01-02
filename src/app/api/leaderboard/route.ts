@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { ApiResponse, LeaderboardResponse, LeaderboardEntry } from '@/types';
 
+// Force dynamic rendering (uses request.url)
+export const dynamic = 'force-dynamic';
+
 const ADMIN_API_URL = process.env.NEXT_PUBLIC_ADMIN_API_URL || 'https://admindashboardsober.onrender.com/api/v1';
 
 // GET /api/leaderboard - Fetch leaderboard data from admin server
