@@ -33,13 +33,13 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onStart, isConnected }) => {
     <Card variant="default" hover className="flex flex-col h-full">
       {/* Header */}
       <div className="flex items-start gap-4 mb-4">
-        <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-sober-blue-dark to-sober-blue-darker flex items-center justify-center overflow-hidden flex-shrink-0">
+        <div className="w-20 h-20 rounded-xl bg-gradient-to-br from-sober-blue-dark to-sober-blue-darker flex items-center justify-center overflow-hidden flex-shrink-0 border border-white/10">
           <Image
             src={task.icon}
             alt={task.title}
-            width={48}
-            height={48}
-            className="object-contain"
+            width={80}
+            height={80}
+            className="object-cover w-full h-full"
           />
         </div>
         <div className="flex-1 min-w-0">

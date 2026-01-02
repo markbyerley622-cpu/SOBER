@@ -15,6 +15,18 @@ const Hero: React.FC = () => {
 
   return (
     <section className="relative min-h-screen flex items-center pt-24 overflow-hidden">
+      {/* Hero Banner Background */}
+      <div className="absolute inset-0 z-0">
+        <Image
+          src="/banner.jpg"
+          alt="SOBER MADE FUN Banner"
+          fill
+          className="object-cover opacity-20"
+          priority
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-sober-blue-darker/80 via-sober-blue-darker/90 to-sober-blue-darker" />
+      </div>
+
       {/* Background gradient orbs */}
       <div className="absolute top-20 left-10 w-72 h-72 bg-sober-blue/20 rounded-full blur-3xl" />
       <div className="absolute bottom-20 right-10 w-96 h-96 bg-[#9945FF]/10 rounded-full blur-3xl" />
@@ -159,11 +171,11 @@ const Hero: React.FC = () => {
               <div className="absolute inset-0 bg-gradient-to-r from-[#14F195]/30 via-sober-blue/20 to-[#9945FF]/30 rounded-full blur-3xl scale-90" />
 
               <Image
-                src="/Screenshot_2026-01-01_230537-removebg-preview.png"
-                alt="SOBER Mascot"
-                width={450}
-                height={450}
-                className="relative z-10 animate-float drop-shadow-2xl"
+                src="/photo_2026-01-02_23-57-58-removebg-preview.png"
+                alt="SOBER Mascot - Strong Giraffe"
+                width={500}
+                height={500}
+                className="relative z-10 animate-float drop-shadow-[0_0_30px_rgba(20,241,149,0.4)]"
                 priority
               />
 

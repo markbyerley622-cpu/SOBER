@@ -14,7 +14,7 @@ export const TASKS: Task[] = [
     proofType: 'image',
     status: 'available',
     completedCount: 1247,
-    icon: '/noalhc-removebg-preview.png',
+    icon: '/bad no drinking.jpg',
   },
   {
     id: 'alcohol-7-day-streak',
@@ -26,7 +26,7 @@ export const TASKS: Task[] = [
     proofType: 'streak',
     status: 'available',
     completedCount: 892,
-    icon: '/noalhc-removebg-preview.png',
+    icon: '/bad no drinking.jpg',
   },
   {
     id: 'alcohol-30-day-streak',
@@ -38,7 +38,7 @@ export const TASKS: Task[] = [
     proofType: 'streak',
     status: 'locked',
     completedCount: 324,
-    icon: '/noalhc-removebg-preview.png',
+    icon: '/good winning.jpg',
   },
 
   // Smoke-Free Tasks
@@ -52,7 +52,7 @@ export const TASKS: Task[] = [
     proofType: 'image',
     status: 'available',
     completedCount: 956,
-    icon: '/nosmoke-removebg-preview (1).png',
+    icon: '/good 7days sober.jpg',
   },
   {
     id: 'smoke-7-day-streak',
@@ -64,7 +64,7 @@ export const TASKS: Task[] = [
     proofType: 'streak',
     status: 'available',
     completedCount: 678,
-    icon: '/nosmoke-removebg-preview (1).png',
+    icon: '/good 7days sober.jpg',
   },
 
   // Fitness Tasks
@@ -78,7 +78,7 @@ export const TASKS: Task[] = [
     proofType: 'image',
     status: 'available',
     completedCount: 2341,
-    icon: '/gym-removebg-preview.png',
+    icon: '/gym good.jpg',
   },
   {
     id: 'fitness-7-day-active',
@@ -90,7 +90,7 @@ export const TASKS: Task[] = [
     proofType: 'streak',
     status: 'available',
     completedCount: 1123,
-    icon: '/gym-removebg-preview.png',
+    icon: '/gym good.jpg',
   },
 
   // Mindfulness Tasks
@@ -104,7 +104,7 @@ export const TASKS: Task[] = [
     proofType: 'image',
     status: 'available',
     completedCount: 1876,
-    icon: '/meditate_-removebg-preview.png',
+    icon: '/water good.jpg',
   },
   {
     id: 'mindfulness-journal',
@@ -116,7 +116,7 @@ export const TASKS: Task[] = [
     proofType: 'image',
     status: 'available',
     completedCount: 1432,
-    icon: '/meditate_-removebg-preview.png',
+    icon: '/water good.jpg',
   },
 
   // Community Tasks
@@ -130,7 +130,7 @@ export const TASKS: Task[] = [
     proofType: 'referral',
     status: 'available',
     completedCount: 567,
-    icon: '/Screenshot_2026-01-01_230424-removebg-preview.png',
+    icon: '/good winning.jpg',
   },
   {
     id: 'community-share-story',
@@ -142,7 +142,7 @@ export const TASKS: Task[] = [
     proofType: 'image',
     status: 'available',
     completedCount: 789,
-    icon: '/Screenshot_2026-01-01_230424-removebg-preview.png',
+    icon: '/good winning.jpg',
   },
 
   // Accountability Tasks
@@ -156,7 +156,7 @@ export const TASKS: Task[] = [
     proofType: 'check-in',
     status: 'available',
     completedCount: 15678,
-    icon: '/Screenshot_2026-01-01_230537-removebg-preview.png',
+    icon: '/good habits.jpg',
   },
   {
     id: 'accountability-weekly-reflection',
@@ -168,7 +168,7 @@ export const TASKS: Task[] = [
     proofType: 'check-in',
     status: 'available',
     completedCount: 4521,
-    icon: '/Screenshot_2026-01-01_230537-removebg-preview.png',
+    icon: '/good habits.jpg',
   },
 ];
 
