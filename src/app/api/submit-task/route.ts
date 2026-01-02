@@ -119,6 +119,8 @@ export async function POST(request: NextRequest) {
 
     // For check-in type tasks, we don't need a file
     if (proofType === 'check-in' || proofType === 'streak') {
+      console.log('[submit-task] Check-in/streak task - calling /upload/confirm');
+
       // Create a simple submission without file upload
       const confirmPayload = JSON.stringify({
         walletAddress,
@@ -128,32 +130,54 @@ export async function POST(request: NextRequest) {
       });
       const confirmSignature = createSignature(confirmPayload);
 
-      const confirmResponse = await fetch(`${ADMIN_API_URL}/upload/confirm`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Signature': confirmSignature,
-        },
-        body: confirmPayload,
-      });
+      console.log('[submit-task] Confirm URL:', `${ADMIN_API_URL}/upload/confirm`);
+      console.log('[submit-task] Payload length:', confirmPayload.length);
 
-      if (!confirmResponse.ok) {
-        const error = await confirmResponse.json();
+      try {
+        const confirmResponse = await fetch(`${ADMIN_API_URL}/upload/confirm`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Signature': confirmSignature,
+          },
+          body: confirmPayload,
+        });
+
+        console.log('[submit-task] Confirm response status:', confirmResponse.status);
+
+        if (!confirmResponse.ok) {
+          const errorText = await confirmResponse.text();
+          console.log('[submit-task] Confirm error:', errorText);
+          let errorJson;
+          try {
+            errorJson = JSON.parse(errorText);
+          } catch {
+            errorJson = { error: { message: errorText } };
+          }
+          return NextResponse.json(
+            { success: false, error: errorJson.error?.message || 'Submission failed' },
+            { status: confirmResponse.status }
+          );
+        }
+
+        const result = await confirmResponse.json();
+        console.log('[submit-task] Confirm success:', result);
+
+        return NextResponse.json({
+          success: true,
+          data: {
+            submissionId: result.data.submissionId,
+            status: result.data.status,
+            submittedAt: result.data.submittedAt,
+          },
+        });
+      } catch (fetchError) {
+        console.error('[submit-task] Fetch error on confirm:', fetchError);
         return NextResponse.json(
-          { success: false, error: error.error?.message || 'Submission failed' },
-          { status: confirmResponse.status }
+          { success: false, error: `Failed to connect to admin server: ${fetchError instanceof Error ? fetchError.message : 'Unknown error'}` },
+          { status: 500 }
         );
       }
-
-      const result = await confirmResponse.json();
-      return NextResponse.json({
-        success: true,
-        data: {
-          submissionId: result.data.submissionId,
-          status: result.data.status,
-          submittedAt: result.data.submittedAt,
-        },
-      });
     }
 
     // For X post link submissions (community share tasks)
