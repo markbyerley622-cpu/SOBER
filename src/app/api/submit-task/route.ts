@@ -20,39 +20,46 @@ function createSignature(payload: string): string {
     .digest('hex');
 }
 
-// Retry fetch with shorter timeout for Vercel's 10s limit
-async function fetchWithRetry(
+// Wake up the server by hitting health endpoint (doesn't count toward rate limit)
+async function wakeUpServer(): Promise<boolean> {
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 8000);
+
+    const response = await fetch(`${ADMIN_API_URL.replace('/api/v1', '')}/health`, {
+      method: 'GET',
+      signal: controller.signal,
+    });
+    clearTimeout(timeoutId);
+
+    console.log('[wakeUpServer] Health check response:', response.status);
+    return response.ok;
+  } catch (error) {
+    console.log('[wakeUpServer] Server not responding yet:', (error as Error).message);
+    return false;
+  }
+}
+
+// Simple fetch with timeout (no retries - server should be awake)
+async function fetchWithTimeout(
   url: string,
   options: RequestInit,
-  maxRetries = 2,
-  initialDelay = 500
+  timeoutMs = 8000
 ): Promise<Response> {
-  let lastError: Error | null = null;
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
-  for (let attempt = 0; attempt < maxRetries; attempt++) {
-    try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 8000); // 8s timeout (Vercel has 10s limit)
-
-      const response = await fetch(url, {
-        ...options,
-        signal: controller.signal,
-      });
-      clearTimeout(timeoutId);
-      return response;
-    } catch (error) {
-      lastError = error as Error;
-      console.log(`[fetchWithRetry] Attempt ${attempt + 1} failed:`, lastError.message);
-
-      if (attempt < maxRetries - 1) {
-        const delay = initialDelay * Math.pow(2, attempt);
-        console.log(`[fetchWithRetry] Retrying in ${delay}ms...`);
-        await new Promise(resolve => setTimeout(resolve, delay));
-      }
-    }
+  try {
+    const response = await fetch(url, {
+      ...options,
+      signal: controller.signal,
+    });
+    clearTimeout(timeoutId);
+    return response;
+  } catch (error) {
+    clearTimeout(timeoutId);
+    throw error;
   }
-
-  throw lastError || new Error('All retry attempts failed');
 }
 
 // Fetch tasks from admin server and build ID mapping
@@ -69,8 +76,10 @@ async function getAdminTaskId(frontendTaskId: string): Promise<string | null> {
   try {
     console.log('[getAdminTaskId] Fetching tasks from:', `${ADMIN_API_URL}/public/tasks`);
 
-    // Use retry for cold start handling
-    const response = await fetchWithRetry(`${ADMIN_API_URL}/public/tasks`, {
+    // Wake up server first (health endpoint doesn't count toward rate limit)
+    await wakeUpServer();
+
+    const response = await fetchWithTimeout(`${ADMIN_API_URL}/public/tasks`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
@@ -184,7 +193,16 @@ export async function POST(request: NextRequest) {
       console.log('[submit-task] Payload length:', confirmPayload.length);
 
       try {
-        const confirmResponse = await fetchWithRetry(`${ADMIN_API_URL}/upload/confirm`, {
+        // Wake up server first
+        const isAwake = await wakeUpServer();
+        if (!isAwake) {
+          return NextResponse.json(
+            { success: false, error: 'Server is waking up. Please try again in 30 seconds.' },
+            { status: 503 }
+          );
+        }
+
+        const confirmResponse = await fetchWithTimeout(`${ADMIN_API_URL}/upload/confirm`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -250,7 +268,7 @@ export async function POST(request: NextRequest) {
       const confirmSignature = createSignature(confirmPayload);
 
       try {
-        const confirmResponse = await fetchWithRetry(`${ADMIN_API_URL}/upload/confirm`, {
+        const confirmResponse = await fetchWithTimeout(`${ADMIN_API_URL}/upload/confirm`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -279,7 +297,7 @@ export async function POST(request: NextRequest) {
       } catch (fetchError) {
         console.error('[submit-task] X post submission error:', fetchError);
         return NextResponse.json(
-          { success: false, error: 'Server is starting up. Please wait 30 seconds and try again.' },
+          { success: false, error: 'Server is waking up. Please wait 30 seconds and try again.' },
           { status: 503 }
         );
       }
@@ -304,7 +322,7 @@ export async function POST(request: NextRequest) {
       });
       const uploadRequestSignature = createSignature(uploadRequestPayload);
 
-      const uploadUrlResponse = await fetchWithRetry(`${ADMIN_API_URL}/upload/request`, {
+      const uploadUrlResponse = await fetchWithTimeout(`${ADMIN_API_URL}/upload/request`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -350,7 +368,7 @@ export async function POST(request: NextRequest) {
       });
       const confirmSignature = createSignature(confirmPayload);
 
-      const confirmResponse = await fetchWithRetry(`${ADMIN_API_URL}/upload/confirm`, {
+      const confirmResponse = await fetchWithTimeout(`${ADMIN_API_URL}/upload/confirm`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -379,9 +397,9 @@ export async function POST(request: NextRequest) {
     } catch (fetchError) {
       console.error('[submit-task] File upload error:', fetchError);
       return NextResponse.json(
-        { success: false, error: 'Server is starting up. Please wait 30 seconds and try again.' },
+        { success: false, error: 'Server is waking up. Please wait 30 seconds and try again.' },
         { status: 503 }
-      );
+        );
     }
   } catch (error) {
     console.error('[submit-task] Error:', error);
