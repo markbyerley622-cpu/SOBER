@@ -115,8 +115,19 @@ async function getAdminTaskId(frontendTaskId: string): Promise<string | null> {
 export async function POST(request: NextRequest) {
   try {
     console.log('[submit-task] Starting submission...');
+    console.log('[submit-task] ADMIN_API_URL:', ADMIN_API_URL);
 
-    const formData = await request.formData();
+    let formData;
+    try {
+      formData = await request.formData();
+    } catch (formError) {
+      console.error('[submit-task] FormData parse error:', formError);
+      return NextResponse.json(
+        { success: false, error: 'Failed to parse form data' },
+        { status: 400 }
+      );
+    }
+
     const walletAddress = formData.get('walletAddress') as string;
     const taskId = formData.get('taskId') as string;
     const proofType = formData.get('proofType') as string;
@@ -124,12 +135,20 @@ export async function POST(request: NextRequest) {
     const file = formData.get('file') as File | null;
     const xPostUrl = formData.get('xPostUrl') as string | null; // X/Twitter post link
 
-    console.log('[submit-task] Form data:', { walletAddress: walletAddress?.slice(0, 10), taskId, proofType, hasFile: !!file, xPostUrl });
+    console.log('[submit-task] Form data:', {
+      walletAddress: walletAddress?.slice(0, 10),
+      taskId,
+      proofType,
+      hasFile: !!file,
+      xPostUrl,
+      hasWallet: !!walletAddress,
+      hasTaskId: !!taskId
+    });
 
     if (!walletAddress || !taskId) {
-      console.log('[submit-task] Missing required fields');
+      console.log('[submit-task] Missing required fields - wallet:', !!walletAddress, 'taskId:', !!taskId);
       return NextResponse.json(
-        { success: false, error: 'Missing required fields' },
+        { success: false, error: `Missing required fields: ${!walletAddress ? 'wallet ' : ''}${!taskId ? 'taskId' : ''}`.trim() },
         { status: 400 }
       );
     }
@@ -140,9 +159,10 @@ export async function POST(request: NextRequest) {
     console.log('[submit-task] Admin task ID:', adminTaskId);
 
     if (!adminTaskId) {
-      console.log('[submit-task] Task not found on server');
+      console.log('[submit-task] Task not found on server for ID:', taskId);
+      console.log('[submit-task] Available mappings:', taskIdCache ? Array.from(taskIdCache.entries()) : 'cache empty');
       return NextResponse.json(
-        { success: false, error: 'Task not found on server. Please try again later.' },
+        { success: false, error: `Task "${taskId}" not found on admin server. Try refreshing the page.` },
         { status: 400 }
       );
     }
