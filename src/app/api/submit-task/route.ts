@@ -20,6 +20,41 @@ function createSignature(payload: string): string {
     .digest('hex');
 }
 
+// Retry fetch with exponential backoff (handles Render cold starts)
+async function fetchWithRetry(
+  url: string,
+  options: RequestInit,
+  maxRetries = 3,
+  initialDelay = 2000
+): Promise<Response> {
+  let lastError: Error | null = null;
+
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30s timeout for cold starts
+
+      const response = await fetch(url, {
+        ...options,
+        signal: controller.signal,
+      });
+      clearTimeout(timeoutId);
+      return response;
+    } catch (error) {
+      lastError = error as Error;
+      console.log(`[fetchWithRetry] Attempt ${attempt + 1} failed:`, lastError.message);
+
+      if (attempt < maxRetries - 1) {
+        const delay = initialDelay * Math.pow(2, attempt);
+        console.log(`[fetchWithRetry] Retrying in ${delay}ms...`);
+        await new Promise(resolve => setTimeout(resolve, delay));
+      }
+    }
+  }
+
+  throw lastError || new Error('All retry attempts failed');
+}
+
 // Fetch tasks from admin server and build ID mapping
 async function getAdminTaskId(frontendTaskId: string): Promise<string | null> {
   const now = Date.now();
@@ -34,16 +69,11 @@ async function getAdminTaskId(frontendTaskId: string): Promise<string | null> {
   try {
     console.log('[getAdminTaskId] Fetching tasks from:', `${ADMIN_API_URL}/public/tasks`);
 
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s timeout
-
-    // Fetch tasks from admin server
-    const response = await fetch(`${ADMIN_API_URL}/public/tasks`, {
+    // Use retry for cold start handling
+    const response = await fetchWithRetry(`${ADMIN_API_URL}/public/tasks`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
-      signal: controller.signal,
     });
-    clearTimeout(timeoutId);
 
     console.log('[getAdminTaskId] Response status:', response.status);
 
@@ -134,7 +164,7 @@ export async function POST(request: NextRequest) {
       console.log('[submit-task] Payload length:', confirmPayload.length);
 
       try {
-        const confirmResponse = await fetch(`${ADMIN_API_URL}/upload/confirm`, {
+        const confirmResponse = await fetchWithRetry(`${ADMIN_API_URL}/upload/confirm`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -174,8 +204,8 @@ export async function POST(request: NextRequest) {
       } catch (fetchError) {
         console.error('[submit-task] Fetch error on confirm:', fetchError);
         return NextResponse.json(
-          { success: false, error: `Failed to connect to admin server: ${fetchError instanceof Error ? fetchError.message : 'Unknown error'}` },
-          { status: 500 }
+          { success: false, error: `Admin server unavailable. Please try again in 30 seconds (server may be waking up).` },
+          { status: 503 }
         );
       }
     }
@@ -199,7 +229,108 @@ export async function POST(request: NextRequest) {
       });
       const confirmSignature = createSignature(confirmPayload);
 
-      const confirmResponse = await fetch(`${ADMIN_API_URL}/upload/confirm`, {
+      try {
+        const confirmResponse = await fetchWithRetry(`${ADMIN_API_URL}/upload/confirm`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Signature': confirmSignature,
+          },
+          body: confirmPayload,
+        });
+
+        if (!confirmResponse.ok) {
+          const error = await confirmResponse.json();
+          return NextResponse.json(
+            { success: false, error: error.error?.message || 'Submission failed' },
+            { status: confirmResponse.status }
+          );
+        }
+
+        const result = await confirmResponse.json();
+        return NextResponse.json({
+          success: true,
+          data: {
+            submissionId: result.data.submissionId,
+            status: result.data.status,
+            submittedAt: result.data.submittedAt,
+          },
+        });
+      } catch (fetchError) {
+        console.error('[submit-task] X post submission error:', fetchError);
+        return NextResponse.json(
+          { success: false, error: 'Admin server unavailable. Please try again in 30 seconds.' },
+          { status: 503 }
+        );
+      }
+    }
+
+    // For image/video submissions, we need to handle file upload
+    if (!file) {
+      return NextResponse.json(
+        { success: false, error: 'Proof file or X post link required for this task type' },
+        { status: 400 }
+      );
+    }
+
+    try {
+      // Step 1: Request signed upload URL from admin server
+      const uploadRequestPayload = JSON.stringify({
+        walletAddress,
+        taskId: adminTaskId,
+        filename: file.name,
+        contentType: file.type,
+        fileSize: file.size,
+      });
+      const uploadRequestSignature = createSignature(uploadRequestPayload);
+
+      const uploadUrlResponse = await fetchWithRetry(`${ADMIN_API_URL}/upload/request`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Signature': uploadRequestSignature,
+        },
+        body: uploadRequestPayload,
+      });
+
+      if (!uploadUrlResponse.ok) {
+        const error = await uploadUrlResponse.json();
+        return NextResponse.json(
+          { success: false, error: error.error?.message || 'Failed to get upload URL' },
+          { status: uploadUrlResponse.status }
+        );
+      }
+
+      const uploadUrlData = await uploadUrlResponse.json();
+      const { uploadUrl, uploadKey } = uploadUrlData.data;
+
+      // Step 2: Upload file directly to S3/MinIO
+      const fileBuffer = await file.arrayBuffer();
+      const uploadResponse = await fetch(uploadUrl, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': file.type,
+        },
+        body: fileBuffer,
+      });
+
+      if (!uploadResponse.ok) {
+        return NextResponse.json(
+          { success: false, error: 'Failed to upload file' },
+          { status: 500 }
+        );
+      }
+
+      // Step 3: Confirm upload with admin server
+      const confirmPayload = JSON.stringify({
+        walletAddress,
+        taskId: adminTaskId,
+        uploadKey,
+        userNote: notes || undefined,
+      });
+      const confirmSignature = createSignature(confirmPayload);
+
+      const confirmResponse = await fetchWithRetry(`${ADMIN_API_URL}/upload/confirm`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -225,98 +356,13 @@ export async function POST(request: NextRequest) {
           submittedAt: result.data.submittedAt,
         },
       });
-    }
-
-    // For image/video submissions, we need to handle file upload
-    if (!file) {
+    } catch (fetchError) {
+      console.error('[submit-task] File upload error:', fetchError);
       return NextResponse.json(
-        { success: false, error: 'Proof file or X post link required for this task type' },
-        { status: 400 }
+        { success: false, error: 'Admin server unavailable. Please try again in 30 seconds.' },
+        { status: 503 }
       );
     }
-
-    // Step 1: Request signed upload URL from admin server
-    const uploadRequestPayload = JSON.stringify({
-      walletAddress,
-      taskId: adminTaskId,
-      filename: file.name,
-      contentType: file.type,
-      fileSize: file.size,
-    });
-    const uploadRequestSignature = createSignature(uploadRequestPayload);
-
-    const uploadUrlResponse = await fetch(`${ADMIN_API_URL}/upload/request`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Signature': uploadRequestSignature,
-      },
-      body: uploadRequestPayload,
-    });
-
-    if (!uploadUrlResponse.ok) {
-      const error = await uploadUrlResponse.json();
-      return NextResponse.json(
-        { success: false, error: error.error?.message || 'Failed to get upload URL' },
-        { status: uploadUrlResponse.status }
-      );
-    }
-
-    const uploadUrlData = await uploadUrlResponse.json();
-    const { uploadUrl, uploadKey } = uploadUrlData.data;
-
-    // Step 2: Upload file directly to S3/MinIO
-    const fileBuffer = await file.arrayBuffer();
-    const uploadResponse = await fetch(uploadUrl, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': file.type,
-      },
-      body: fileBuffer,
-    });
-
-    if (!uploadResponse.ok) {
-      return NextResponse.json(
-        { success: false, error: 'Failed to upload file' },
-        { status: 500 }
-      );
-    }
-
-    // Step 3: Confirm upload with admin server
-    const confirmPayload = JSON.stringify({
-      walletAddress,
-      taskId: adminTaskId,
-      uploadKey,
-      userNote: notes || undefined,
-    });
-    const confirmSignature = createSignature(confirmPayload);
-
-    const confirmResponse = await fetch(`${ADMIN_API_URL}/upload/confirm`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Signature': confirmSignature,
-      },
-      body: confirmPayload,
-    });
-
-    if (!confirmResponse.ok) {
-      const error = await confirmResponse.json();
-      return NextResponse.json(
-        { success: false, error: error.error?.message || 'Submission failed' },
-        { status: confirmResponse.status }
-      );
-    }
-
-    const result = await confirmResponse.json();
-    return NextResponse.json({
-      success: true,
-      data: {
-        submissionId: result.data.submissionId,
-        status: result.data.status,
-        submittedAt: result.data.submittedAt,
-      },
-    });
   } catch (error) {
     console.error('[submit-task] Error:', error);
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
