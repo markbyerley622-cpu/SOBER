@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: sober-frontend
+    runtime: node
+    buildCommand: npm install && npm run build
+    startCommand: npm run start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NEXT_PUBLIC_SOLANA_RPC_URL
+        value: https://api.devnet.solana.com
+      - key: NEXT_PUBLIC_ADMIN_API_URL
+        value: https://admindashboardsober.onrender.com/api/v1
+      - key: ADMIN_API_SECRET
+        sync: false
