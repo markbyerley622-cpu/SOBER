@@ -199,18 +199,10 @@ export async function POST(request: NextRequest) {
       const confirmSignature = createSignature(confirmPayload);
 
       console.log('[submit-task] Confirm URL:', `${ADMIN_API_URL}/upload/confirm`);
-      console.log('[submit-task] Payload length:', confirmPayload.length);
+      console.log('[submit-task] Payload:', confirmPayload);
 
       try {
-        // Wake up server first
-        const isAwake = await wakeUpServer();
-        if (!isAwake) {
-          return NextResponse.json(
-            { success: false, error: 'Server is waking up. Please try again in 30 seconds.' },
-            { status: 503 }
-          );
-        }
-
+        // Server should already be awake from getAdminTaskId call
         const confirmResponse = await fetchWithTimeout(`${ADMIN_API_URL}/upload/confirm`, {
           method: 'POST',
           headers: {
