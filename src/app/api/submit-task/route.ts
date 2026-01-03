@@ -20,31 +20,40 @@ function createSignature(payload: string): string {
     .digest('hex');
 }
 
-// Wake up the server by hitting health endpoint (doesn't count toward rate limit)
+// Wake up the server by hitting health endpoint with retries
 async function wakeUpServer(): Promise<boolean> {
-  try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 8000);
+  const maxRetries = 3;
+  const timeoutPerAttempt = 15000; // 15 seconds per attempt
 
-    const response = await fetch(`${ADMIN_API_URL.replace('/api/v1', '')}/health`, {
-      method: 'GET',
-      signal: controller.signal,
-    });
-    clearTimeout(timeoutId);
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), timeoutPerAttempt);
 
-    console.log('[wakeUpServer] Health check response:', response.status);
-    return response.ok;
-  } catch (error) {
-    console.log('[wakeUpServer] Server not responding yet:', (error as Error).message);
-    return false;
+      console.log(`[wakeUpServer] Attempt ${attempt}/${maxRetries}...`);
+      const response = await fetch(`${ADMIN_API_URL.replace('/api/v1', '')}/health`, {
+        method: 'GET',
+        signal: controller.signal,
+      });
+      clearTimeout(timeoutId);
+
+      console.log('[wakeUpServer] Health check response:', response.status);
+      if (response.ok) return true;
+    } catch (error) {
+      console.log(`[wakeUpServer] Attempt ${attempt} failed:`, (error as Error).message);
+      if (attempt < maxRetries) {
+        await new Promise(r => setTimeout(r, 2000)); // Wait 2s before retry
+      }
+    }
   }
+  return false;
 }
 
-// Simple fetch with timeout (no retries - server should be awake)
+// Fetch with longer timeout for Render cold starts
 async function fetchWithTimeout(
   url: string,
   options: RequestInit,
-  timeoutMs = 8000
+  timeoutMs = 30000
 ): Promise<Response> {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
