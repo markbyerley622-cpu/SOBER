@@ -107,14 +107,14 @@ const Header: React.FC = () => {
           </a>
         </div>
         {/* Main Navigation Row */}
-        <div className="flex items-center justify-between h-16 md:h-20">
+        <div className="flex items-center justify-between h-20 md:h-24 lg:h-28">
           {/* Logo - BIG AND BEAUTIFUL */}
           <Link href="/" className="flex items-center gap-3">
             <Image
               src="/logo-removebg-preview (1).png"
               alt="SOBER MADE FUN"
-              width={280}
-              height={100}
+              width={320}
+              height={120}
               className="h-16 md:h-20 lg:h-24 w-auto drop-shadow-[0_0_15px_rgba(20,241,149,0.3)]"
               priority
             />
