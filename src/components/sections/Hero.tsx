@@ -14,7 +14,7 @@ const Hero: React.FC = () => {
   const { globalStats, userStats, isLoadingGlobalStats, isLoadingUserStats } = useApp();
 
   return (
-    <section className="relative min-h-screen flex items-center pt-24 overflow-hidden">
+    <section className="relative min-h-screen flex items-center pt-32 overflow-hidden">
       {/* Background gradient orbs */}
       <div className="absolute top-20 left-10 w-72 h-72 bg-sober-blue/20 rounded-full blur-3xl" />
       <div className="absolute bottom-20 right-10 w-96 h-96 bg-[#9945FF]/10 rounded-full blur-3xl" />

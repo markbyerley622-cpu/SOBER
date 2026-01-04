@@ -6,3 +6,4 @@ export { default as LiveFeed } from './LiveFeed';
 export { default as Community } from './Community';
 export { default as ProofUploadModal } from './ProofUploadModal';
 export { default as UserProfile } from './UserProfile';
+export { default as ComicGallery } from './ComicGallery';

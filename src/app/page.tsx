@@ -11,6 +11,7 @@ import {
   Community,
   ProofUploadModal,
   UserProfile,
+  ComicGallery,
 } from '@/components/sections';
 
 export default function Home() {
@@ -35,6 +36,9 @@ export default function Home() {
 
         {/* Leaderboard */}
         <Leaderboard />
+
+        {/* Comic Gallery - The SOBER Journey */}
+        <ComicGallery />
 
         {/* Community */}
         <Community />
