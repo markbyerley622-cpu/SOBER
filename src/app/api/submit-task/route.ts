@@ -249,8 +249,8 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // For X post link submissions (community share tasks)
-    if (xPostUrl) {
+    // For X post link submissions (community share tasks) - handle before general submissions
+    if (xPostUrl && xPostUrl.trim()) {
       // Validate X/Twitter URL
       const xUrlPattern = /^https?:\/\/(twitter\.com|x\.com)\/\w+\/status\/\d+/i;
       if (!xUrlPattern.test(xPostUrl)) {
@@ -304,71 +304,19 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // For image/video submissions, we need to handle file upload
-    if (!file) {
-      return NextResponse.json(
-        { success: false, error: 'Proof file or X post link required for this task type' },
-        { status: 400 }
-      );
-    }
+    // For image/video submissions - simplified: just record the submission without file upload
+    // The file is optional - we just need wallet + task info
+    console.log('[submit-task] Image/video submission - simplified flow (no file upload needed)');
+
+    const confirmPayload = JSON.stringify({
+      walletAddress,
+      taskId: adminTaskId,
+      uploadKey: `submission-${Date.now()}`,
+      userNote: notes || (file ? `Image submitted: ${file.name}` : 'Task submission'),
+    });
+    const confirmSignature = createSignature(confirmPayload);
 
     try {
-      // Step 1: Request signed upload URL from admin server
-      const uploadRequestPayload = JSON.stringify({
-        walletAddress,
-        taskId: adminTaskId,
-        filename: file.name,
-        contentType: file.type,
-        fileSize: file.size,
-      });
-      const uploadRequestSignature = createSignature(uploadRequestPayload);
-
-      const uploadUrlResponse = await fetchWithTimeout(`${ADMIN_API_URL}/upload/request`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Signature': uploadRequestSignature,
-        },
-        body: uploadRequestPayload,
-      });
-
-      if (!uploadUrlResponse.ok) {
-        const error = await uploadUrlResponse.json();
-        return NextResponse.json(
-          { success: false, error: error.error?.message || 'Failed to get upload URL' },
-          { status: uploadUrlResponse.status }
-        );
-      }
-
-      const uploadUrlData = await uploadUrlResponse.json();
-      const { uploadUrl, uploadKey } = uploadUrlData.data;
-
-      // Step 2: Upload file directly to S3/MinIO
-      const fileBuffer = await file.arrayBuffer();
-      const uploadResponse = await fetch(uploadUrl, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': file.type,
-        },
-        body: fileBuffer,
-      });
-
-      if (!uploadResponse.ok) {
-        return NextResponse.json(
-          { success: false, error: 'Failed to upload file' },
-          { status: 500 }
-        );
-      }
-
-      // Step 3: Confirm upload with admin server
-      const confirmPayload = JSON.stringify({
-        walletAddress,
-        taskId: adminTaskId,
-        uploadKey,
-        userNote: notes || undefined,
-      });
-      const confirmSignature = createSignature(confirmPayload);
-
       const confirmResponse = await fetchWithTimeout(`${ADMIN_API_URL}/upload/confirm`, {
         method: 'POST',
         headers: {
@@ -379,14 +327,23 @@ export async function POST(request: NextRequest) {
       });
 
       if (!confirmResponse.ok) {
-        const error = await confirmResponse.json();
+        const errorText = await confirmResponse.text();
+        console.log('[submit-task] Confirm error:', errorText);
+        let errorJson;
+        try {
+          errorJson = JSON.parse(errorText);
+        } catch {
+          errorJson = { error: { message: errorText } };
+        }
         return NextResponse.json(
-          { success: false, error: error.error?.message || 'Submission failed' },
+          { success: false, error: errorJson.error?.message || 'Submission failed' },
           { status: confirmResponse.status }
         );
       }
 
       const result = await confirmResponse.json();
+      console.log('[submit-task] Submission success:', result);
+
       return NextResponse.json({
         success: true,
         data: {
@@ -396,11 +353,11 @@ export async function POST(request: NextRequest) {
         },
       });
     } catch (fetchError) {
-      console.error('[submit-task] File upload error:', fetchError);
+      console.error('[submit-task] Submission error:', fetchError);
       return NextResponse.json(
-        { success: false, error: 'Server is waking up. Please wait 30 seconds and try again.' },
+        { success: false, error: 'Server is waking up. Please wait a moment and try again.' },
         { status: 503 }
-        );
+      );
     }
   } catch (error) {
     console.error('[submit-task] Error:', error);
