@@ -11,57 +11,57 @@ interface ComicPanel {
 
 const comicPanels: ComicPanel[] = [
   {
-    src: '/photo_2026-01-05_02-27-16.jpg',
+    src: '/photo_7_2026-01-05_23-49-15.jpg',
     caption: 'Start Your Journey',
     size: 'medium',
   },
   {
-    src: '/photo_2026-01-05_02-27-24.jpg',
-    caption: 'Share Your Story',
+    src: '/photo_8_2026-01-05_23-49-15.jpg',
+    caption: 'Safari Adventure',
     size: 'medium',
   },
   {
-    src: '/photo_2026-01-05_02-27-34.jpg',
-    caption: 'Join The Community',
+    src: '/photo_9_2026-01-05_23-49-15.jpg',
+    caption: 'Join The Herd',
     size: 'large',
   },
   {
-    src: '/photo_2026-01-05_02-27-39.jpg',
-    caption: 'Learn & Grow',
+    src: '/photo_10_2026-01-05_23-49-15.jpg',
+    caption: 'Wild & Free',
     size: 'medium',
   },
   {
-    src: '/photo_2026-01-05_02-27-43.jpg',
+    src: '/photo_11_2026-01-05_23-49-15.jpg',
     caption: 'Find Inner Peace',
     size: 'tall',
   },
   {
-    src: '/photo_2026-01-05_02-28-17.jpg',
-    caption: 'Stay Strong Socially',
+    src: '/photo_12_2026-01-05_23-49-15.jpg',
+    caption: 'Stay Strong',
     size: 'medium',
   },
   {
-    src: '/photo_2026-01-05_02-27-47.jpg',
+    src: '/photo_13_2026-01-05_23-49-15.jpg',
     caption: 'Day 7 Streak!',
     size: 'wide',
   },
   {
-    src: '/photo_2026-01-05_02-27-53.jpg',
-    caption: 'Build Your Strength',
+    src: '/photo_14_2026-01-05_23-49-15.jpg',
+    caption: 'Build Strength',
     size: 'medium',
   },
   {
-    src: '/photo_2026-01-05_02-28-35.jpg',
+    src: '/photo_15_2026-01-05_23-49-15.jpg',
     caption: 'Breathe Fresh Air',
     size: 'medium',
   },
   {
-    src: '/photo_2026-01-05_02-28-07.jpg',
+    src: '/photo_16_2026-01-05_23-49-15.jpg',
     caption: 'Live Your Best Life',
     size: 'wide',
   },
   {
-    src: '/photo_2026-01-05_02-27-57.jpg',
+    src: '/photo_17_2026-01-05_23-49-15.jpg',
     caption: 'Freedom Awaits',
     size: 'large',
   },
@@ -75,10 +75,10 @@ const comicPanels: ComicPanel[] = [
 const ComicGallery: React.FC = () => {
   return (
     <section className="py-20 relative overflow-hidden" id="gallery">
-      {/* Background effects */}
-      <div className="absolute inset-0 bg-gradient-to-b from-sober-blue-darker via-black/50 to-sober-blue-darker" />
-      <div className="absolute top-1/4 left-0 w-96 h-96 bg-[#9945FF]/10 rounded-full blur-3xl" />
-      <div className="absolute bottom-1/4 right-0 w-96 h-96 bg-sober-blue/10 rounded-full blur-3xl" />
+      {/* Jungle/Safari Background effects */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#0F172A] via-[#14532D]/20 to-[#0F172A]" />
+      <div className="absolute top-1/4 left-0 w-96 h-96 bg-amber-600/10 rounded-full blur-3xl" />
+      <div className="absolute bottom-1/4 right-0 w-96 h-96 bg-emerald-600/10 rounded-full blur-3xl" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}

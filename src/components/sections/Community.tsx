@@ -7,9 +7,9 @@ import { Card, Button } from '../ui';
 const Community: React.FC = () => {
   return (
     <section id="community" className="py-20 relative overflow-hidden">
-      {/* Background effects */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-sober-blue/10 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 left-0 w-72 h-72 bg-sober-green/10 rounded-full blur-3xl" />
+      {/* Safari/Jungle Background effects */}
+      <div className="absolute top-0 right-0 w-96 h-96 bg-amber-600/10 rounded-full blur-3xl" />
+      <div className="absolute bottom-0 left-0 w-72 h-72 bg-emerald-600/10 rounded-full blur-3xl" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -106,14 +106,14 @@ const Community: React.FC = () => {
           {/* Right Column - Community Image */}
           <div className="relative flex justify-center">
             <div className="relative">
-              {/* Glow effect */}
-              <div className="absolute inset-0 bg-gradient-to-r from-[#14F195]/30 via-[#9945FF]/20 to-sober-gold/30 rounded-3xl blur-3xl scale-95" />
+              {/* Safari/Jungle Glow effect */}
+              <div className="absolute inset-0 bg-gradient-to-r from-amber-500/30 via-emerald-600/20 to-yellow-500/30 rounded-3xl blur-3xl scale-95" />
 
               {/* Community Image - Giraffe with Friends */}
-              <div className="relative rounded-3xl overflow-hidden border-2 border-[#14F195]/20 shadow-2xl">
+              <div className="relative rounded-3xl overflow-hidden border-2 border-amber-500/20 shadow-2xl">
                 <Image
-                  src="/community.jpg"
-                  alt="SOBER Community - Giraffe with Friends"
+                  src="/photo_6_2026-01-05_23-49-15.jpg"
+                  alt="SOBER Community - Safari Adventure"
                   width={450}
                   height={350}
                   className="relative z-10"
@@ -121,13 +121,13 @@ const Community: React.FC = () => {
               </div>
 
               {/* Floating elements */}
-              <div className="absolute -top-4 -left-4 bg-sober-blue-darker/95 backdrop-blur-sm px-4 py-2 rounded-xl border border-[#14F195]/30 shadow-lg z-20">
-                <span className="text-sober-green">✓</span>
-                <span className="text-gray-300 text-sm ml-2">New Year New Me</span>
+              <div className="absolute -top-4 -left-4 bg-sober-blue-darker/95 backdrop-blur-sm px-4 py-2 rounded-xl border border-amber-500/30 shadow-lg z-20">
+                <span className="text-lg">🦒</span>
+                <span className="text-gray-300 text-sm ml-2">Wild & Sober</span>
               </div>
 
-              <div className="absolute -bottom-4 -right-4 bg-sober-blue-darker/95 backdrop-blur-sm px-4 py-2 rounded-xl border border-[#9945FF]/30 shadow-lg z-20">
-                <span className="text-lg">💪</span>
+              <div className="absolute -bottom-4 -right-4 bg-sober-blue-darker/95 backdrop-blur-sm px-4 py-2 rounded-xl border border-emerald-500/30 shadow-lg z-20">
+                <span className="text-lg">🌿</span>
                 <span className="text-gray-300 text-sm ml-2">Stronger together</span>
               </div>
             </div>

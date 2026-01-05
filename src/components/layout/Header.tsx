@@ -22,10 +22,10 @@ const Header: React.FC = () => {
     <header className="fixed top-0 left-0 right-0 z-50 glass-dark">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* CA and Twitter Row */}
-        <div className="flex items-center justify-between py-2 border-b border-white/10">
+        <div className="flex items-center justify-between py-2 border-b border-[#F4C430]/20">
           <div className="flex items-center gap-2">
-            <span className="text-gray-400 font-medium text-sm">CA:</span>
-            <span className="text-sober-green font-mono font-bold text-sm md:text-base lg:text-lg">
+            <span className="text-[#D6B37A] font-medium text-sm">CA:</span>
+            <span className="text-[#F4C430] font-mono font-bold text-sm md:text-base lg:text-lg">
               {siteConfig.caAddress}
             </span>
           </div>
@@ -33,7 +33,7 @@ const Header: React.FC = () => {
             href="https://x.com/sobermadefun"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors group"
+            className="flex items-center gap-2 text-[#EFE6D1] hover:text-[#F4C430] transition-colors group"
           >
             <span className="font-medium text-sm">Follow</span>
             <svg
@@ -48,14 +48,14 @@ const Header: React.FC = () => {
         </div>
         {/* Main Navigation Row */}
         <div className="flex items-center justify-between h-20 md:h-24 lg:h-28">
-          {/* Logo - BIG AND BEAUTIFUL */}
+          {/* Logo - Safari Title Image */}
           <Link href="/" className="flex items-center gap-3">
             <Image
-              src="/logo-removebg-preview (1).png"
-              alt="SOBER MADE FUN"
-              width={320}
+              src="/photo_19_2026-01-05_23-49-15-removebg-preview (1).png"
+              alt="Sober Made Fun"
+              width={400}
               height={120}
-              className="h-16 md:h-20 lg:h-24 w-auto drop-shadow-[0_0_15px_rgba(20,241,149,0.3)]"
+              className="h-16 md:h-20 lg:h-24 w-auto drop-shadow-[0_0_15px_rgba(217,119,6,0.4)]"
               priority
             />
           </Link>
@@ -66,7 +66,7 @@ const Header: React.FC = () => {
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-gray-300 hover:text-white transition-colors font-medium"
+                className="text-[#EFE6D1] hover:text-[#F4C430] transition-colors font-medium font-display"
               >
                 {link.label}
               </Link>
@@ -80,7 +80,7 @@ const Header: React.FC = () => {
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden p-2 text-gray-300 hover:text-white"
+            className="md:hidden p-2 text-[#EFE6D1] hover:text-[#F4C430]"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
             <svg
@@ -111,19 +111,19 @@ const Header: React.FC = () => {
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="md:hidden bg-sober-blue-darker/95 backdrop-blur-lg border-t border-white/10">
+        <div className="md:hidden bg-[#0B0B0B]/95 backdrop-blur-lg border-t border-[#F4C430]/20">
           <nav className="flex flex-col p-4 space-y-4">
             {navLinks.map(link => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-gray-300 hover:text-white transition-colors font-medium py-2"
+                className="text-[#EFE6D1] hover:text-[#F4C430] transition-colors font-medium font-display py-2"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 {link.label}
               </Link>
             ))}
-            <div className="pt-4 border-t border-white/10">
+            <div className="pt-4 border-t border-[#F4C430]/20">
               <WalletButton />
             </div>
           </nav>

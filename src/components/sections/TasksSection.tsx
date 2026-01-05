@@ -63,7 +63,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onStart, isConnected }) => {
       {/* Stats */}
       <div className="flex items-center py-3 border-t border-white/10 mb-4">
         <div className="flex items-center gap-2">
-          <Image src="/usd1 (1).png" alt="USD1" width={24} height={24} className="rounded-full" />
+          <Image src="/coin logo.png" alt="$SOBER" width={30} height={30} className="rounded-full" />
           <span className="gradient-solana font-bold text-lg">+{formatSOL(task.rewardAmount)}</span>
           <span className="text-gray-400 text-sm">$SOBER</span>
         </div>
@@ -111,13 +111,17 @@ const TasksSection: React.FC = () => {
 
   return (
     <section id="tasks" className="py-20 relative">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Safari/Giraffe Background accents */}
+      <div className="absolute top-10 right-10 w-72 h-72 bg-[#F4C430]/5 rounded-full blur-3xl" />
+      <div className="absolute bottom-10 left-10 w-64 h-64 bg-[#D6B37A]/5 rounded-full blur-3xl" />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
         <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
-            Tasks & <span className="gradient-solana">Rewards</span>
+          <h2 className="text-3xl sm:text-4xl font-bold text-[#EFE6D1] mb-4 font-display">
+            Tasks & <span className="text-[#F4C430]">Rewards</span>
           </h2>
-          <p className="text-gray-400 max-w-2xl mx-auto">
+          <p className="text-[#D6B37A] max-w-2xl mx-auto">
             Choose from a variety of sobriety-focused tasks. Complete them to earn $SOBER
             directly to your wallet. All rewards are sent from the dev wallet.
           </p>
@@ -129,10 +133,10 @@ const TasksSection: React.FC = () => {
             <button
               key={cat.key}
               onClick={() => setActiveCategory(cat.key)}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-all font-display ${
                 activeCategory === cat.key
-                  ? 'bg-gradient-to-r from-[#14F195] to-[#9945FF] text-white'
-                  : 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white'
+                  ? 'bg-gradient-to-r from-[#F4C430] to-[#D6B37A] text-[#0B0B0B]'
+                  : 'bg-[#F4C430]/5 text-[#D6B37A] hover:bg-[#F4C430]/10 hover:text-[#F4C430]'
               }`}
             >
               {cat.label}
@@ -155,7 +159,7 @@ const TasksSection: React.FC = () => {
         {/* Empty State */}
         {filteredTasks.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-gray-400">No tasks available in this category yet.</p>
+            <p className="text-[#D6B37A]">No tasks available in this category yet.</p>
           </div>
         )}
       </div>

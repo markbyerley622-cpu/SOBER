@@ -44,8 +44,9 @@ const Leaderboard: React.FC = () => {
 
   return (
     <section id="leaderboard" className="py-20 relative">
-      {/* Background accent */}
-      <div className="absolute top-1/2 left-0 w-64 h-64 bg-sober-gold/10 rounded-full blur-3xl -translate-y-1/2" />
+      {/* Safari/Jungle Background accent */}
+      <div className="absolute top-1/2 left-0 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl -translate-y-1/2" />
+      <div className="absolute top-1/4 right-0 w-48 h-48 bg-emerald-600/5 rounded-full blur-3xl" />
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}

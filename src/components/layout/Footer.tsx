@@ -6,17 +6,20 @@ import Link from 'next/link';
 
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-sober-blue-darker/80 border-t border-white/10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <footer className="bg-sober-blue-darker/80 border-t border-amber-500/10 relative overflow-hidden">
+      {/* Safari/Jungle Background accent */}
+      <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/5 rounded-full blur-3xl" />
+      <div className="absolute bottom-0 left-0 w-48 h-48 bg-emerald-600/5 rounded-full blur-3xl" />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Brand */}
           <div className="col-span-1 md:col-span-2">
             <Image
-              src="/logo-removebg-preview (1).png"
-              alt="SOBER MADE FUN"
-              width={200}
+              src="/photo_19_2026-01-05_23-49-15-removebg-preview (1).png"
+              alt="Sober Made Fun"
+              width={280}
               height={80}
-              className="h-20 w-auto mb-4 drop-shadow-[0_0_10px_rgba(20,241,149,0.3)]"
+              className="h-16 md:h-20 w-auto mb-4 drop-shadow-[0_0_15px_rgba(244,196,48,0.4)]"
             />
             <p className="text-gray-400 max-w-md text-sm sm:text-base">
               Web3-powered motivation to crush your New Year goals. Complete tasks, earn{' '}
@@ -24,7 +27,7 @@ const Footer: React.FC = () => {
               and level up your life. Launched on USD1.
             </p>
             <div className="flex items-center gap-2 mt-4 text-xs sm:text-sm text-gray-500">
-              <Image src="/usd1 (1).png" alt="USD1" width={18} height={18} className="rounded-full" />
+              <Image src="/coin logo.png" alt="$SOBER" width={22} height={22} className="rounded-full" />
               <span>Solana | USD1</span>
             </div>
             <div className="flex gap-4 mt-6">
@@ -122,7 +125,7 @@ const Footer: React.FC = () => {
             <span className="text-sober-gold">$SOBER</span>
             {' '}&bull;{' '}
             <span className="flex items-center gap-1">
-              <Image src="/usd1 (1).png" alt="USD1" width={14} height={14} className="rounded-full" />
+              <Image src="/coin logo.png" alt="$SOBER" width={18} height={18} className="rounded-full" />
               <span className="gradient-solana font-medium">USD1</span>
             </span>
             {' '}&bull;{' '}

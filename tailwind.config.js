@@ -8,34 +8,55 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Primary brand colors extracted from logo
+        // Safari/Giraffe Theme Colors
+        giraffe: {
+          yellow: '#F4C430',
+          light: '#F7D35C',
+          dark: '#C9A228',
+        },
+        savanna: {
+          cream: '#EFE6D1',
+          light: '#F5F0E5',
+          dark: '#D4C9B5',
+        },
+        pattern: {
+          tan: '#D6B37A',
+          light: '#E2C696',
+          dark: '#B89A5F',
+        },
+        outline: {
+          black: '#0B0B0B',
+          dark: '#1A1A1A',
+          medium: '#2A2A2A',
+        },
+        // Legacy mappings for compatibility
         sober: {
           blue: {
-            light: '#4FACFE',
-            DEFAULT: '#00D4FF',
-            dark: '#1E3A5F',
-            darker: '#0F172A',
+            light: '#F4C430',
+            DEFAULT: '#F4C430',
+            dark: '#1A1A1A',
+            darker: '#0B0B0B',
           },
           green: {
-            light: '#4ADE80',
-            DEFAULT: '#22C55E',
-            dark: '#16A34A',
+            light: '#F4C430',
+            DEFAULT: '#F4C430',
+            dark: '#D6B37A',
           },
           orange: {
-            light: '#FB923C',
-            DEFAULT: '#F97316',
-            dark: '#EA580C',
+            light: '#D6B37A',
+            DEFAULT: '#D6B37A',
+            dark: '#B89A5F',
           },
           gold: {
-            light: '#FDE047',
-            DEFAULT: '#FBBF24',
-            dark: '#F59E0B',
+            light: '#F7D35C',
+            DEFAULT: '#F4C430',
+            dark: '#C9A228',
           },
         },
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
-        display: ['Inter', 'system-ui', 'sans-serif'],
+        display: ['"Baloo 2"', '"Luckiest Guy"', 'system-ui', 'sans-serif'],
       },
       animation: {
         'float': 'float 3s ease-in-out infinite',

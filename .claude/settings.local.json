@@ -13,7 +13,18 @@
       "Bash(curl:*)",
       "Bash(powershell -Command \"cd ''C:\\\\Users\\\\markb\\\\Desktop\\\\SOBER''; git status\")",
       "Bash(powershell -Command \"cd ''C:\\\\Users\\\\markb\\\\Desktop\\\\SOBER''; git init; git remote add origin https://github.com/markbyerley622-cpu/SOBER.git\")",
-      "Bash(powershell -Command:*)"
+      "Bash(powershell -Command:*)",
+      "Bash(dir:*)",
+      "Bash(vercel --version:*)",
+      "Bash(render:*)",
+      "Bash(npm install:*)",
+      "Bash(git clone:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(git pull:*)",
+      "Bash(git rebase:*)",
+      "Bash(git checkout:*)"
     ]
   }
 }
