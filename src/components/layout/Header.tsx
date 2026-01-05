@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import WalletButton from '../wallet/WalletButton';
@@ -8,7 +8,69 @@ import { useApp } from '@/context/AppContext';
 
 const Header: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { siteConfig } = useApp();
+  const { siteConfig, updateCaAddress } = useApp();
+
+  // CA Update Modal State
+  const [showCaModal, setShowCaModal] = useState(false);
+  const [password, setPassword] = useState('');
+  const [newCa, setNewCa] = useState('');
+  const [error, setError] = useState('');
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
+
+  // Listen for Ctrl+D to open CA update modal
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    if (e.ctrlKey && e.key === 'd') {
+      e.preventDefault();
+      e.stopPropagation();
+      setShowCaModal(true);
+      setError('');
+      setPassword('');
+      setNewCa('');
+      setIsAuthenticated(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown, true);
+    return () => window.removeEventListener('keydown', handleKeyDown, true);
+  }, [handleKeyDown]);
+
+  const handlePasswordSubmit = () => {
+    const correctPassword = process.env.NEXT_PUBLIC_CA_UPDATE_PASSWORD;
+    if (password === correctPassword) {
+      setIsAuthenticated(true);
+      setError('');
+      setNewCa(siteConfig.caAddress);
+    } else {
+      setError('Incorrect password');
+    }
+  };
+
+  const handleUpdateCa = async () => {
+    if (newCa.trim()) {
+      setIsUpdating(true);
+      const result = await updateCaAddress(password, newCa.trim());
+      setIsUpdating(false);
+
+      if (result.success) {
+        setShowCaModal(false);
+        setIsAuthenticated(false);
+        setPassword('');
+        setNewCa('');
+      } else {
+        setError(result.error || 'Failed to update');
+      }
+    }
+  };
+
+  const handleCloseModal = () => {
+    setShowCaModal(false);
+    setIsAuthenticated(false);
+    setPassword('');
+    setNewCa('');
+    setError('');
+  };
 
   const navLinks = [
     { href: '#how-it-works', label: 'How It Works' },
@@ -127,6 +189,87 @@ const Header: React.FC = () => {
               <WalletButton />
             </div>
           </nav>
+        </div>
+      )}
+
+      {/* CA Update Modal (Ctrl+D) */}
+      {showCaModal && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm">
+          <div className="bg-[#1A1A1A] border border-[#F4C430]/30 rounded-xl p-6 w-full max-w-md mx-4 shadow-2xl">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-bold text-[#EFE6D1] font-display">
+                {isAuthenticated ? 'Update CA Address' : 'Enter Password'}
+              </h2>
+              <button
+                onClick={handleCloseModal}
+                className="text-[#D6B37A] hover:text-[#EFE6D1] transition-colors"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            {!isAuthenticated ? (
+              <>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handlePasswordSubmit()}
+                  placeholder="Enter password..."
+                  className="w-full bg-black/30 border border-[#F4C430]/30 rounded-lg px-4 py-3 text-[#EFE6D1] placeholder-[#D6B37A]/50 focus:outline-none focus:border-[#F4C430] transition-colors mb-4"
+                  autoFocus
+                />
+                {error && (
+                  <p className="text-red-400 text-sm mb-4">{error}</p>
+                )}
+                <button
+                  onClick={handlePasswordSubmit}
+                  className="w-full bg-gradient-to-r from-[#F4C430] to-[#D6B37A] text-[#0B0B0B] py-3 rounded-lg font-semibold font-display hover:opacity-90 transition-opacity"
+                >
+                  Unlock
+                </button>
+              </>
+            ) : (
+              <>
+                <div className="mb-4">
+                  <label className="block text-[#D6B37A] text-sm mb-2">New CA Address</label>
+                  <input
+                    type="text"
+                    value={newCa}
+                    onChange={(e) => setNewCa(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleUpdateCa()}
+                    placeholder="Enter CA address or 'Coming Soon'..."
+                    className="w-full bg-black/30 border border-[#F4C430]/30 rounded-lg px-4 py-3 text-[#EFE6D1] placeholder-[#D6B37A]/50 focus:outline-none focus:border-[#F4C430] transition-colors font-mono"
+                    autoFocus
+                  />
+                </div>
+                {error && (
+                  <p className="text-red-400 text-sm mb-4">{error}</p>
+                )}
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => setNewCa('Coming Soon')}
+                    className="flex-1 bg-[#F4C430]/10 border border-[#F4C430]/30 text-[#F4C430] py-3 rounded-lg font-semibold font-display hover:bg-[#F4C430]/20 transition-colors"
+                    disabled={isUpdating}
+                  >
+                    Reset to &quot;Coming Soon&quot;
+                  </button>
+                  <button
+                    onClick={handleUpdateCa}
+                    className="flex-1 bg-gradient-to-r from-[#F4C430] to-[#D6B37A] text-[#0B0B0B] py-3 rounded-lg font-semibold font-display hover:opacity-90 transition-opacity"
+                    disabled={isUpdating}
+                  >
+                    {isUpdating ? 'Updating...' : 'Update CA'}
+                  </button>
+                </div>
+                <p className="text-[#D6B37A]/60 text-xs mt-4 text-center">
+                  Updates sync to all users within 5 seconds
+                </p>
+              </>
+            )}
+          </div>
         </div>
       )}
     </header>
