@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { useWalletModal } from '@solana/wallet-adapter-react-ui';
-import { Card, Badge, Button, SolanaLogo } from '../ui';
+import { Card, Badge, Button } from '../ui';
 import { useApp } from '@/context/AppContext';
 import { Task, TaskCategory } from '@/types';
 import { CATEGORY_INFO, DIFFICULTY_INFO, formatSOL } from '@/data/tasks';
@@ -61,14 +61,11 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onStart, isConnected }) => {
       </p>
 
       {/* Stats */}
-      <div className="flex items-center justify-between py-3 border-t border-white/10 mb-4">
+      <div className="flex items-center py-3 border-t border-white/10 mb-4">
         <div className="flex items-center gap-2">
-          <SolanaLogo size={24} />
+          <Image src="/usd1 (1).png" alt="USD1" width={24} height={24} className="rounded-full" />
           <span className="gradient-solana font-bold text-lg">+{formatSOL(task.rewardAmount)}</span>
-          <span className="text-gray-400 text-sm">SOL</span>
-        </div>
-        <div className="text-gray-500 text-sm">
-          {task.completedCount.toLocaleString()} completed
+          <span className="text-gray-400 text-sm">$SOBER</span>
         </div>
       </div>
 
@@ -121,8 +118,8 @@ const TasksSection: React.FC = () => {
             Tasks & <span className="gradient-solana">Rewards</span>
           </h2>
           <p className="text-gray-400 max-w-2xl mx-auto">
-            Choose from a variety of sobriety-focused tasks. Complete them to earn SOL
-            directly to your wallet. All rewards are distributed on Solana.
+            Choose from a variety of sobriety-focused tasks. Complete them to earn $SOBER
+            directly to your wallet. All rewards are sent from the dev wallet.
           </p>
         </div>
 

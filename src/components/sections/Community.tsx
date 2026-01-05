@@ -123,7 +123,7 @@ const Community: React.FC = () => {
               {/* Floating elements */}
               <div className="absolute -top-4 -left-4 bg-sober-blue-darker/95 backdrop-blur-sm px-4 py-2 rounded-xl border border-[#14F195]/30 shadow-lg z-20">
                 <span className="text-sober-green">✓</span>
-                <span className="text-gray-300 text-sm ml-2">12.8K members</span>
+                <span className="text-gray-300 text-sm ml-2">New Year New Me</span>
               </div>
 
               <div className="absolute -bottom-4 -right-4 bg-sober-blue-darker/95 backdrop-blur-sm px-4 py-2 rounded-xl border border-[#9945FF]/30 shadow-lg z-20">

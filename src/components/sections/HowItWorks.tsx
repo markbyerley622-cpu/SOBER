@@ -107,7 +107,7 @@ const HowItWorks: React.FC = () => {
             </div>
             <div className="min-w-0">
               <h4 className="text-white font-medium text-sm sm:text-base">USD1 Launch</h4>
-              <p className="text-gray-400 text-xs sm:text-sm truncate">Buybacks & burns + creator rewards</p>
+              <p className="text-gray-400 text-xs sm:text-sm truncate">Buybacks & burns from dev wallet</p>
             </div>
           </div>
 

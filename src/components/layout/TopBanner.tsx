@@ -1,22 +1,16 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
+import { useApp } from '@/context/AppContext';
 
 const TopBanner: React.FC = () => {
-  const [caValue, setCaValue] = useState<string>('Coming Soon');
+  const { siteConfig, updateCaAddress } = useApp();
   const [showModal, setShowModal] = useState(false);
   const [password, setPassword] = useState('');
   const [newCa, setNewCa] = useState('');
   const [error, setError] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  // Load CA from localStorage on mount
-  useEffect(() => {
-    const stored = localStorage.getItem('sober_ca_address');
-    if (stored) {
-      setCaValue(stored);
-    }
-  }, []);
+  const [isUpdating, setIsUpdating] = useState(false);
 
   // Listen for Ctrl+D
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
@@ -40,20 +34,26 @@ const TopBanner: React.FC = () => {
     if (password === correctPassword) {
       setIsAuthenticated(true);
       setError('');
-      setNewCa(caValue);
+      setNewCa(siteConfig.caAddress);
     } else {
       setError('Incorrect password');
     }
   };
 
-  const handleUpdateCa = () => {
+  const handleUpdateCa = async () => {
     if (newCa.trim()) {
-      setCaValue(newCa.trim());
-      localStorage.setItem('sober_ca_address', newCa.trim());
-      setShowModal(false);
-      setIsAuthenticated(false);
-      setPassword('');
-      setNewCa('');
+      setIsUpdating(true);
+      const result = await updateCaAddress(password, newCa.trim());
+      setIsUpdating(false);
+
+      if (result.success) {
+        setShowModal(false);
+        setIsAuthenticated(false);
+        setPassword('');
+        setNewCa('');
+      } else {
+        setError(result.error || 'Failed to update');
+      }
     }
   };
 
@@ -74,7 +74,7 @@ const TopBanner: React.FC = () => {
           <div className="flex items-center gap-2 md:gap-3">
             <span className="text-gray-400 font-medium">CA:</span>
             <span className="text-sober-green font-mono font-bold text-base md:text-xl lg:text-2xl">
-              {caValue}
+              {siteConfig.caAddress}
             </span>
           </div>
 
@@ -151,22 +151,28 @@ const TopBanner: React.FC = () => {
                     autoFocus
                   />
                 </div>
+                {error && (
+                  <p className="text-red-400 text-sm mb-4">{error}</p>
+                )}
                 <div className="flex gap-3">
                   <button
-                    onClick={() => {
-                      setNewCa('Coming Soon');
-                    }}
+                    onClick={() => setNewCa('Coming Soon')}
                     className="flex-1 btn-secondary py-3 font-semibold"
+                    disabled={isUpdating}
                   >
-                    Reset to "Coming Soon"
+                    Reset to &quot;Coming Soon&quot;
                   </button>
                   <button
                     onClick={handleUpdateCa}
                     className="flex-1 btn-primary py-3 font-semibold"
+                    disabled={isUpdating}
                   >
-                    Update CA
+                    {isUpdating ? 'Updating...' : 'Update CA'}
                   </button>
                 </div>
+                <p className="text-gray-500 text-xs mt-4 text-center">
+                  Updates sync to all users within 5 seconds
+                </p>
               </>
             )}
           </div>

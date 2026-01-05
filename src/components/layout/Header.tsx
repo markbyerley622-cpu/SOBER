@@ -1,73 +1,14 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import WalletButton from '../wallet/WalletButton';
+import { useApp } from '@/context/AppContext';
 
 const Header: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [caValue, setCaValue] = useState<string>('Coming Soon');
-  const [showModal, setShowModal] = useState(false);
-  const [password, setPassword] = useState('');
-  const [newCa, setNewCa] = useState('');
-  const [error, setError] = useState('');
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  // Load CA from localStorage on mount
-  useEffect(() => {
-    const stored = localStorage.getItem('sober_ca_address');
-    if (stored) {
-      setCaValue(stored);
-    }
-  }, []);
-
-  // Listen for Ctrl+D
-  const handleKeyDown = useCallback((e: KeyboardEvent) => {
-    if (e.ctrlKey && e.key === 'd') {
-      e.preventDefault();
-      setShowModal(true);
-      setError('');
-      setPassword('');
-      setNewCa('');
-      setIsAuthenticated(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [handleKeyDown]);
-
-  const handlePasswordSubmit = () => {
-    const correctPassword = process.env.NEXT_PUBLIC_CA_UPDATE_PASSWORD;
-    if (password === correctPassword) {
-      setIsAuthenticated(true);
-      setError('');
-      setNewCa(caValue);
-    } else {
-      setError('Incorrect password');
-    }
-  };
-
-  const handleUpdateCa = () => {
-    if (newCa.trim()) {
-      setCaValue(newCa.trim());
-      localStorage.setItem('sober_ca_address', newCa.trim());
-      setShowModal(false);
-      setIsAuthenticated(false);
-      setPassword('');
-      setNewCa('');
-    }
-  };
-
-  const handleClose = () => {
-    setShowModal(false);
-    setIsAuthenticated(false);
-    setPassword('');
-    setNewCa('');
-    setError('');
-  };
+  const { siteConfig } = useApp();
 
   const navLinks = [
     { href: '#how-it-works', label: 'How It Works' },
@@ -78,7 +19,6 @@ const Header: React.FC = () => {
   ];
 
   return (
-    <>
     <header className="fixed top-0 left-0 right-0 z-50 glass-dark">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* CA and Twitter Row */}
@@ -86,7 +26,7 @@ const Header: React.FC = () => {
           <div className="flex items-center gap-2">
             <span className="text-gray-400 font-medium text-sm">CA:</span>
             <span className="text-sober-green font-mono font-bold text-sm md:text-base lg:text-lg">
-              {caValue}
+              {siteConfig.caAddress}
             </span>
           </div>
           <a
@@ -190,82 +130,6 @@ const Header: React.FC = () => {
         </div>
       )}
     </header>
-
-    {/* Password/Update Modal */}
-    {showModal && (
-      <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm">
-        <div className="bg-sober-blue-darker border border-sober-blue/30 rounded-xl p-6 w-full max-w-md mx-4 shadow-2xl">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-bold text-white">
-              {isAuthenticated ? 'Update CA Address' : 'Enter Password'}
-            </h2>
-            <button
-              onClick={handleClose}
-              className="text-gray-400 hover:text-white transition-colors"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-          </div>
-
-          {!isAuthenticated ? (
-            <>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handlePasswordSubmit()}
-                placeholder="Enter password..."
-                className="w-full bg-black/30 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-sober-blue transition-colors mb-4"
-                autoFocus
-              />
-              {error && (
-                <p className="text-red-400 text-sm mb-4">{error}</p>
-              )}
-              <button
-                onClick={handlePasswordSubmit}
-                className="w-full btn-primary py-3 font-semibold"
-              >
-                Unlock
-              </button>
-            </>
-          ) : (
-            <>
-              <div className="mb-4">
-                <label className="block text-gray-400 text-sm mb-2">New CA Address</label>
-                <input
-                  type="text"
-                  value={newCa}
-                  onChange={(e) => setNewCa(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleUpdateCa()}
-                  placeholder="Enter CA address or 'Coming Soon'..."
-                  className="w-full bg-black/30 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-sober-blue transition-colors font-mono"
-                  autoFocus
-                />
-              </div>
-              <div className="flex gap-3">
-                <button
-                  onClick={() => {
-                    setNewCa('Coming Soon');
-                  }}
-                  className="flex-1 btn-secondary py-3 font-semibold"
-                >
-                  Reset to &quot;Coming Soon&quot;
-                </button>
-                <button
-                  onClick={handleUpdateCa}
-                  className="flex-1 btn-primary py-3 font-semibold"
-                >
-                  Update CA
-                </button>
-              </div>
-            </>
-          )}
-        </div>
-      </div>
-    )}
-    </>
   );
 };
 

@@ -26,6 +26,11 @@ interface GlobalStats {
   lastUpdated: Date;
 }
 
+interface SiteConfig {
+  caAddress: string;
+  updatedAt: Date | null;
+}
+
 interface UserStats {
   tasksCompleted: number;
   tasksPending: number;
@@ -57,6 +62,10 @@ interface AppContextType {
 
   // Global stats (visible to everyone)
   globalStats: GlobalStats | null;
+
+  // Site config (CA address, etc.)
+  siteConfig: SiteConfig;
+  updateCaAddress: (password: string, caAddress: string) => Promise<{ success: boolean; error?: string }>;
 
   // User stats (only when wallet connected)
   userStats: UserStats | null;
@@ -109,8 +118,56 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [isProofModalOpen, setIsProofModalOpen] = useState(false);
 
+  // Site config (CA address - synced across all users)
+  const [siteConfig, setSiteConfig] = useState<SiteConfig>({
+    caAddress: 'Coming Soon',
+    updatedAt: null,
+  });
+
   // Polling interval ref
   const pollIntervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  // =========================================================================
+  // FETCH SITE CONFIG (CA Address - synced across all users)
+  // =========================================================================
+  const refreshSiteConfig = useCallback(async () => {
+    try {
+      const response = await fetch('/api/site-config');
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success) {
+          setSiteConfig({
+            caAddress: data.data.caAddress || 'Coming Soon',
+            updatedAt: data.data.updatedAt ? new Date(data.data.updatedAt) : null,
+          });
+        }
+      }
+    } catch (error) {
+      console.error('Failed to fetch site config:', error);
+    }
+  }, []);
+
+  const updateCaAddress = useCallback(async (password: string, caAddress: string): Promise<{ success: boolean; error?: string }> => {
+    try {
+      const response = await fetch('/api/site-config', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password, caAddress }),
+      });
+      const data = await response.json();
+      if (data.success) {
+        setSiteConfig({
+          caAddress: data.data.caAddress,
+          updatedAt: new Date(data.data.updatedAt),
+        });
+        return { success: true };
+      }
+      return { success: false, error: data.error || 'Failed to update' };
+    } catch (error) {
+      console.error('Failed to update CA:', error);
+      return { success: false, error: 'Failed to update CA' };
+    }
+  }, []);
 
   // =========================================================================
   // FETCH GLOBAL STATS (For Everyone)
@@ -223,10 +280,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     // Initial fetch
     refreshGlobalStats();
+    refreshSiteConfig();
 
-    // Poll every 5 seconds for near real-time updates
+    // Poll every 5 seconds for near real-time updates (stats + CA)
     pollIntervalRef.current = setInterval(() => {
       refreshGlobalStats();
+      refreshSiteConfig();
     }, 5000);
 
     return () => {
@@ -234,7 +293,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         clearInterval(pollIntervalRef.current);
       }
     };
-  }, [refreshGlobalStats]);
+  }, [refreshGlobalStats, refreshSiteConfig]);
 
   // Fetch user stats when wallet connects/disconnects
   useEffect(() => {
@@ -340,6 +399,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
     userTasks,
     activityFeed,
     globalStats,
+    siteConfig,
+    updateCaAddress,
     userStats,
     userSubmissions,
     isLoadingGlobalStats,
