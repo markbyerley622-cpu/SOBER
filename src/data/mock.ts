@@ -88,14 +88,14 @@ const generateRecentActivity = (): ActivityFeedItem[] => {
       type: 'task_completed',
       walletAddress: '7xKp...3mNv',
       taskTitle: 'Daily Check-In',
-      rewardAmount: 50,
+      rewardAmount: 10000,
       timestamp: new Date(Date.now() - 30000), // 30 seconds ago
     },
     {
       id: '2',
       type: 'reward_claimed',
       walletAddress: '9aRt...7bKq',
-      rewardAmount: 1000,
+      rewardAmount: 30000,
       timestamp: new Date(Date.now() - 120000), // 2 minutes ago
     },
     {
@@ -103,7 +103,7 @@ const generateRecentActivity = (): ActivityFeedItem[] => {
       type: 'streak_milestone',
       walletAddress: '3cWz...9pLm',
       streakDays: 30,
-      rewardAmount: 5000,
+      rewardAmount: 100000,
       timestamp: new Date(Date.now() - 300000), // 5 minutes ago
     },
     {
@@ -111,7 +111,7 @@ const generateRecentActivity = (): ActivityFeedItem[] => {
       type: 'task_completed',
       walletAddress: '5dXy...2nJk',
       taskTitle: 'Environment Reset',
-      rewardAmount: 500,
+      rewardAmount: 30000,
       timestamp: new Date(Date.now() - 420000), // 7 minutes ago
     },
     {
@@ -125,14 +125,14 @@ const generateRecentActivity = (): ActivityFeedItem[] => {
       type: 'task_completed',
       walletAddress: '2gHj...6qRs',
       taskTitle: 'Mindful Moment',
-      rewardAmount: 200,
+      rewardAmount: 15000,
       timestamp: new Date(Date.now() - 900000), // 15 minutes ago
     },
     {
       id: '7',
       type: 'reward_claimed',
       walletAddress: '4iKl...8sTu',
-      rewardAmount: 750,
+      rewardAmount: 50000,
       timestamp: new Date(Date.now() - 1200000), // 20 minutes ago
     },
     {
@@ -140,7 +140,7 @@ const generateRecentActivity = (): ActivityFeedItem[] => {
       type: 'task_completed',
       walletAddress: '6jMn...0uVw',
       taskTitle: 'Healthy Body Challenge',
-      rewardAmount: 250,
+      rewardAmount: 20000,
       timestamp: new Date(Date.now() - 1500000), // 25 minutes ago
     },
     {
@@ -148,7 +148,7 @@ const generateRecentActivity = (): ActivityFeedItem[] => {
       type: 'streak_milestone',
       walletAddress: '1kOp...2wXy',
       streakDays: 7,
-      rewardAmount: 1000,
+      rewardAmount: 50000,
       timestamp: new Date(Date.now() - 1800000), // 30 minutes ago
     },
     {
@@ -156,7 +156,7 @@ const generateRecentActivity = (): ActivityFeedItem[] => {
       type: 'task_completed',
       walletAddress: '3lQr...4yZa',
       taskTitle: 'Sober Buddy Referral',
-      rewardAmount: 1000,
+      rewardAmount: 50000,
       timestamp: new Date(Date.now() - 2100000), // 35 minutes ago
     },
   ];
