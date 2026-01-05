@@ -22,15 +22,15 @@ function createSignature(payload: string): string {
 
 // Wake up the server by hitting health endpoint with retries
 async function wakeUpServer(): Promise<boolean> {
-  const maxRetries = 3;
-  const timeoutPerAttempt = 15000; // 15 seconds per attempt
+  const maxRetries = 5;
+  const timeoutPerAttempt = 30000; // 30 seconds per attempt (Render cold start can take 30-60s)
 
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), timeoutPerAttempt);
 
-      console.log(`[wakeUpServer] Attempt ${attempt}/${maxRetries}...`);
+      console.log(`[wakeUpServer] Attempt ${attempt}/${maxRetries}... (waiting up to 30s)`);
       const response = await fetch(`${ADMIN_API_URL.replace('/api/v1', '')}/health`, {
         method: 'GET',
         signal: controller.signal,
@@ -42,7 +42,7 @@ async function wakeUpServer(): Promise<boolean> {
     } catch (error) {
       console.log(`[wakeUpServer] Attempt ${attempt} failed:`, (error as Error).message);
       if (attempt < maxRetries) {
-        await new Promise(r => setTimeout(r, 2000)); // Wait 2s before retry
+        await new Promise(r => setTimeout(r, 3000)); // Wait 3s before retry
       }
     }
   }
@@ -53,7 +53,7 @@ async function wakeUpServer(): Promise<boolean> {
 async function fetchWithTimeout(
   url: string,
   options: RequestInit,
-  timeoutMs = 30000
+  timeoutMs = 60000 // 60 seconds for cold starts
 ): Promise<Response> {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
@@ -243,7 +243,7 @@ export async function POST(request: NextRequest) {
       } catch (fetchError) {
         console.error('[submit-task] Fetch error on confirm:', fetchError);
         return NextResponse.json(
-          { success: false, error: `Server is starting up. Please wait 30 seconds and try again.` },
+          { success: false, error: `Server is waking up. Please wait a moment and try again.` },
           { status: 503 }
         );
       }
