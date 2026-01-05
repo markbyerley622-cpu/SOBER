@@ -4,12 +4,15 @@ import React, { useEffect, useState } from 'react';
 import { Card, Badge } from '../ui';
 import type { LeaderboardEntry } from '@/types';
 
-// Format SOL reward amount
+// Format $SOBER token amount
 const formatReward = (amount: number): string => {
-  if (amount >= 1000) {
-    return (amount / 1000).toFixed(1) + 'K';
+  if (amount >= 1000000) {
+    return (amount / 1000000).toFixed(1) + 'M';
   }
-  return amount.toFixed(3);
+  if (amount >= 1000) {
+    return (amount / 1000).toFixed(0) + 'K';
+  }
+  return amount.toString();
 };
 
 const Leaderboard: React.FC = () => {
@@ -144,7 +147,7 @@ const Leaderboard: React.FC = () => {
                   <span className="text-sober-gold font-bold">
                     {formatReward(entry.totalRewards)}
                   </span>
-                  <span className="text-gray-500 text-xs ml-1">SOL</span>
+                  <span className="text-gray-500 text-xs ml-1">$SOBER</span>
                 </div>
               </div>
             ))}

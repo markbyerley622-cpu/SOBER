@@ -1,7 +1,7 @@
 import { Task } from '@/types';
 
 // Pre-defined sobriety tasks
-// Rewards are in SOL (Solana), ranging from 0.01 to 0.05 SOL per task
+// Rewards are in $SOBER tokens, ranging from 10,000 to 100,000 tokens per task
 export const TASKS: Task[] = [
   // Alcohol-Free Tasks
   {
@@ -9,7 +9,7 @@ export const TASKS: Task[] = [
     title: 'Environment Reset',
     description: 'Clear your living space of alcohol. Upload a photo showing your alcohol-free environment.',
     category: 'alcohol-free',
-    rewardAmount: 0.03, // SOL
+    rewardAmount: 30000, // $SOBER tokens
     difficulty: 'medium',
     proofType: 'image',
     status: 'available',
@@ -21,7 +21,7 @@ export const TASKS: Task[] = [
     title: '7-Day Alcohol Free',
     description: 'Complete 7 consecutive daily check-ins without alcohol consumption.',
     category: 'alcohol-free',
-    rewardAmount: 0.05, // SOL
+    rewardAmount: 50000, // $SOBER tokens
     difficulty: 'medium',
     proofType: 'streak',
     status: 'available',
@@ -33,7 +33,7 @@ export const TASKS: Task[] = [
     title: '30-Day Milestone',
     description: 'Achieve 30 days of sobriety. A major milestone in your journey!',
     category: 'alcohol-free',
-    rewardAmount: 0.1, // SOL - bonus for major milestone
+    rewardAmount: 100000, // $SOBER tokens - bonus for major milestone
     difficulty: 'hard',
     proofType: 'streak',
     status: 'locked',
@@ -47,7 +47,7 @@ export const TASKS: Task[] = [
     title: 'Smoke-Free Zone',
     description: 'Remove all smoking materials from your space. Upload proof of your clean environment.',
     category: 'smoke-free',
-    rewardAmount: 0.03, // SOL
+    rewardAmount: 30000, // $SOBER tokens
     difficulty: 'medium',
     proofType: 'image',
     status: 'available',
@@ -59,7 +59,7 @@ export const TASKS: Task[] = [
     title: '7-Day Smoke Free',
     description: 'Complete 7 consecutive days without smoking. Daily check-ins required.',
     category: 'smoke-free',
-    rewardAmount: 0.05, // SOL
+    rewardAmount: 50000, // $SOBER tokens
     difficulty: 'medium',
     proofType: 'streak',
     status: 'available',
@@ -73,7 +73,7 @@ export const TASKS: Task[] = [
     title: 'Healthy Body Challenge',
     description: 'Complete a workout session. Upload a gym selfie or workout screenshot.',
     category: 'fitness',
-    rewardAmount: 0.02, // SOL
+    rewardAmount: 20000, // $SOBER tokens
     difficulty: 'easy',
     proofType: 'image',
     status: 'available',
@@ -85,7 +85,7 @@ export const TASKS: Task[] = [
     title: '7-Day Active Streak',
     description: 'Exercise for 7 consecutive days. Any form of physical activity counts!',
     category: 'fitness',
-    rewardAmount: 0.04, // SOL
+    rewardAmount: 40000, // $SOBER tokens
     difficulty: 'medium',
     proofType: 'streak',
     status: 'available',
@@ -99,7 +99,7 @@ export const TASKS: Task[] = [
     title: 'Mindful Moment',
     description: 'Complete a 10-minute meditation session. Upload a screenshot from your meditation app.',
     category: 'mindfulness',
-    rewardAmount: 0.015, // SOL
+    rewardAmount: 15000, // $SOBER tokens
     difficulty: 'easy',
     proofType: 'image',
     status: 'available',
@@ -111,7 +111,7 @@ export const TASKS: Task[] = [
     title: 'Reflection Journal',
     description: 'Write about your sobriety journey. Share your wins and challenges (privacy-safe).',
     category: 'mindfulness',
-    rewardAmount: 0.02, // SOL
+    rewardAmount: 20000, // $SOBER tokens
     difficulty: 'easy',
     proofType: 'image',
     status: 'available',
@@ -125,7 +125,7 @@ export const TASKS: Task[] = [
     title: 'Sober Buddy Referral',
     description: 'Refer a friend who joins and completes their first task. Stronger together!',
     category: 'community',
-    rewardAmount: 0.05, // SOL
+    rewardAmount: 50000, // $SOBER tokens
     difficulty: 'medium',
     proofType: 'referral',
     status: 'available',
@@ -137,7 +137,7 @@ export const TASKS: Task[] = [
     title: 'Share Your Story',
     description: 'Share your sobriety journey on social media (Twitter/X). Inspire others!',
     category: 'community',
-    rewardAmount: 0.03, // SOL
+    rewardAmount: 30000, // $SOBER tokens
     difficulty: 'easy',
     proofType: 'image',
     status: 'available',
@@ -151,7 +151,7 @@ export const TASKS: Task[] = [
     title: 'Daily Check-In',
     description: 'Complete your daily sobriety check-in. Consistency is key!',
     category: 'accountability',
-    rewardAmount: 0.01, // SOL
+    rewardAmount: 10000, // $SOBER tokens
     difficulty: 'easy',
     proofType: 'check-in',
     status: 'available',
@@ -163,7 +163,7 @@ export const TASKS: Task[] = [
     title: 'Weekly Reflection',
     description: 'Complete your weekly progress review. Celebrate your wins!',
     category: 'accountability',
-    rewardAmount: 0.015, // SOL
+    rewardAmount: 15000, // $SOBER tokens
     difficulty: 'easy',
     proofType: 'check-in',
     status: 'available',
@@ -199,7 +199,13 @@ export const DIFFICULTY_INFO: Record<Task['difficulty'], { label: string; color:
   'hard': { label: 'Hard', color: 'bg-red-500/20 text-red-400' },
 };
 
-// Format SOL amount
+// Format $SOBER token amount
 export const formatSOL = (amount: number): string => {
-  return amount.toFixed(amount < 0.01 ? 3 : 2);
+  if (amount >= 1000000) {
+    return `${(amount / 1000000).toFixed(1)}M`;
+  }
+  if (amount >= 1000) {
+    return `${(amount / 1000).toFixed(0)}K`;
+  }
+  return amount.toString();
 };

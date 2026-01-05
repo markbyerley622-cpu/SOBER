@@ -4,7 +4,7 @@ import React from 'react';
 import Image from 'next/image';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { useWalletModal } from '@solana/wallet-adapter-react-ui';
-import { Button, SolanaLogo } from '../ui';
+import { Button } from '../ui';
 import { useApp } from '@/context/AppContext';
 import { formatSOL } from '@/data/tasks';
 
@@ -25,9 +25,9 @@ const Hero: React.FC = () => {
           {/* Left Column - Text Content */}
           <div className="text-center lg:text-left">
             <div className="inline-flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-[#14F195]/10 to-[#9945FF]/10 border border-[#9945FF]/30 rounded-full mb-6 flex-wrap justify-center">
-              <SolanaLogo size={20} />
+              <Image src="/usd1 (1).png" alt="USD1" width={20} height={20} className="rounded-full" />
               <span className="gradient-solana text-sm font-medium">
-                Launched on Pump.fun
+                Launched on USD1
               </span>
               {/* Live indicator */}
               <div className="flex items-center gap-1.5 ml-2 pl-2 border-l border-white/20">
@@ -107,19 +107,19 @@ const Hero: React.FC = () => {
                   </div>
                   <div className="text-center lg:text-left">
                     <div className="flex items-center gap-2 justify-center lg:justify-start">
-                      <SolanaLogo size={24} />
+                      <Image src="/usd1 (1).png" alt="USD1" width={24} height={24} className="rounded-full" />
                       <span className="text-2xl sm:text-3xl font-bold gradient-solana">
                         {isLoadingUserStats ? '...' : formatSOL(userStats.totalRewardsEarned)}
                       </span>
                     </div>
-                    <div className="text-gray-400 text-sm">Earned</div>
+                    <div className="text-gray-400 text-sm">$SOBER Earned</div>
                   </div>
                 </div>
                 {userStats.tasksUntilNextTier > 0 && (
                   <div className="mt-4 pt-4 border-t border-white/10">
                     <div className="text-sm text-gray-400">
                       <span className="text-white font-medium">{userStats.tasksUntilNextTier}</span> more tasks to unlock{' '}
-                      <span className="text-yellow-400">next tier</span> (up to {formatSOL(userStats.maxRewardMultiplier)} SOL/task)
+                      <span className="text-yellow-400">next tier</span> (up to {formatSOL(userStats.maxRewardMultiplier)} $SOBER/task)
                     </div>
                   </div>
                 )}
@@ -141,12 +141,12 @@ const Hero: React.FC = () => {
                 </div>
                 <div className="text-center lg:text-left">
                   <div className="flex items-center gap-2 justify-center lg:justify-start">
-                    <SolanaLogo size={24} />
+                    <Image src="/usd1 (1).png" alt="USD1" width={24} height={24} className="rounded-full" />
                     <span className="text-2xl sm:text-3xl font-bold gradient-solana">
                       {isLoadingGlobalStats ? '...' : formatSOL(globalStats?.totalRewardsDistributed || 0)}
                     </span>
                   </div>
-                  <div className="text-gray-400 text-sm">SOL Distributed</div>
+                  <div className="text-gray-400 text-sm">$SOBER Distributed</div>
                 </div>
               </div>
             )}

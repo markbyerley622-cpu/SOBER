@@ -3,7 +3,6 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { SolanaLogo } from '../ui';
 
 const Footer: React.FC = () => {
   return (
@@ -22,11 +21,11 @@ const Footer: React.FC = () => {
             <p className="text-gray-400 max-w-md text-sm sm:text-base">
               Web3-powered motivation to crush your New Year goals. Complete tasks, earn{' '}
               <span className="text-sober-gold font-semibold">$SOBER</span> tokens,
-              and level up your life. Launched on Pump.fun.
+              and level up your life. Launched on USD1.
             </p>
             <div className="flex items-center gap-2 mt-4 text-xs sm:text-sm text-gray-500">
-              <SolanaLogo size={18} />
-              <span>Solana | Pump.fun</span>
+              <Image src="/usd1 (1).png" alt="USD1" width={18} height={18} className="rounded-full" />
+              <span>Solana | USD1</span>
             </div>
             <div className="flex gap-4 mt-6">
               <a
@@ -123,11 +122,11 @@ const Footer: React.FC = () => {
             <span className="text-sober-gold">$SOBER</span>
             {' '}&bull;{' '}
             <span className="flex items-center gap-1">
-              <SolanaLogo size={14} />
-              <span className="gradient-solana font-medium">Solana</span>
+              <Image src="/usd1 (1).png" alt="USD1" width={14} height={14} className="rounded-full" />
+              <span className="gradient-solana font-medium">USD1</span>
             </span>
             {' '}&bull;{' '}
-            Pump.fun
+            Solana
           </p>
         </div>
       </div>

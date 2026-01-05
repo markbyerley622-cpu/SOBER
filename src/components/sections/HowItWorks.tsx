@@ -7,7 +7,7 @@ const steps = [
   {
     number: '01',
     title: 'Connect Wallet',
-    description: 'Connect your Solana wallet to get started. Your SOL rewards will be sent directly here.',
+    description: 'Connect your Solana wallet to get started. Your $SOBER tokens will be sent directly here.',
     icon: (
       <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
@@ -40,7 +40,7 @@ const steps = [
   {
     number: '04',
     title: 'Earn $SOBER',
-    description: 'Once approved, SOL is automatically sent to your connected wallet. No claiming needed!',
+    description: 'Once approved, $SOBER is automatically sent to your connected wallet. No claiming needed!',
     icon: (
       <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -63,7 +63,7 @@ const HowItWorks: React.FC = () => {
             How <span className="text-sober-gold">$SOBER</span> <span className="gradient-text-orange">Works</span>
           </h2>
           <p className="text-gray-400 max-w-2xl mx-auto">
-            Crush your New Year goals and earn <span className="gradient-solana">SOL</span> rewards.
+            Crush your New Year goals and earn <span className="gradient-solana">$SOBER</span> rewards.
             Level up your life, get rewarded, and join a community of winners.
           </p>
         </div>
@@ -106,7 +106,7 @@ const HowItWorks: React.FC = () => {
               <span className="text-sober-gold font-bold text-sm sm:text-base">$</span>
             </div>
             <div className="min-w-0">
-              <h4 className="text-white font-medium text-sm sm:text-base">Pump.fun Launch</h4>
+              <h4 className="text-white font-medium text-sm sm:text-base">USD1 Launch</h4>
               <p className="text-gray-400 text-xs sm:text-sm truncate">Buybacks & burns + creator rewards</p>
             </div>
           </div>

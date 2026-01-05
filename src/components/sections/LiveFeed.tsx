@@ -65,7 +65,7 @@ const FeedItem: React.FC<FeedItemProps> = ({ activity, isNew }) => {
             <span className="text-sober-blue font-medium">{activity.walletAddress}</span>
             {' claimed '}
             <span className="text-sober-gold font-bold">+{formatReward(activity.rewardAmount!)}</span>
-            {' SOL'}
+            {' $SOBER'}
           </>
         );
       case 'streak_milestone':
@@ -102,7 +102,7 @@ const FeedItem: React.FC<FeedItemProps> = ({ activity, isNew }) => {
         <div className="flex items-center gap-2 mt-1">
           {activity.rewardAmount && activity.type === 'task_completed' && (
             <span className="text-sober-gold text-xs font-medium">
-              +{formatReward(activity.rewardAmount)} SOL
+              +{formatReward(activity.rewardAmount)} $SOBER
             </span>
           )}
           {activity.txHash && (
@@ -196,7 +196,7 @@ const LiveFeed: React.FC = () => {
                   .reduce((sum, a) => sum + (a.rewardAmount || 0), 0)
               )}
             </div>
-            <div className="text-gray-400 text-xs">SOL Today</div>
+            <div className="text-gray-400 text-xs">$SOBER Today</div>
           </div>
           <div className="text-center p-3 rounded-xl bg-white/5">
             <div className="text-sober-blue font-bold text-lg">
