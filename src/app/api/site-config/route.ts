@@ -5,14 +5,31 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+// Create Supabase client lazily (not at build time)
+function getSupabaseClient() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-const supabase = createClient(supabaseUrl, supabaseServiceKey);
+  if (!supabaseUrl || !supabaseServiceKey) {
+    return null;
+  }
+
+  return createClient(supabaseUrl, supabaseServiceKey);
+}
 
 // GET - Fetch current site config
 export async function GET() {
   try {
+    const supabase = getSupabaseClient();
+
+    if (!supabase) {
+      // Fallback when Supabase not configured
+      return NextResponse.json({
+        success: true,
+        data: { caAddress: 'Coming Soon', updatedAt: null },
+      });
+    }
+
     const { data, error } = await supabase
       .from('site_config')
       .select('*')
@@ -43,6 +60,15 @@ export async function GET() {
 // POST - Update site config (password protected)
 export async function POST(request: Request) {
   try {
+    const supabase = getSupabaseClient();
+
+    if (!supabase) {
+      return NextResponse.json(
+        { success: false, error: 'Supabase not configured' },
+        { status: 500 }
+      );
+    }
+
     const body = await request.json();
     const { password, caAddress } = body;
 
