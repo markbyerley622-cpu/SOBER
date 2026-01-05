@@ -4,15 +4,15 @@ import { AppProvider } from '@/context/AppContext';
 import './globals.css';
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://soberfun.io'),
-  title: 'SOBER MADE FUN | Earn SOL for Staying Sober',
+  metadataBase: new URL('https://sober-app.vercel.app'),
+  title: 'SOBER MADE FUN | Earn $SOBER for Staying Sober',
   description:
-    'Get rewarded for staying sober. Complete tasks, earn SOL directly to your Solana wallet, and join a supportive community on your wellness journey. Privacy-first, community-driven.',
+    'Get rewarded for staying sober. Complete tasks, earn $SOBER directly to your Solana wallet, and join a supportive community on your wellness journey. Privacy-first, community-driven.',
   keywords: [
     'sobriety',
     'wellness',
     'Solana',
-    'SOL rewards',
+    '$SOBER rewards',
     'crypto rewards',
     'accountability',
     'recovery',
@@ -21,18 +21,18 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: 'SOBER MADE FUN' }],
   openGraph: {
-    title: 'SOBER MADE FUN | Earn SOL for Staying Sober',
+    title: 'SOBER MADE FUN | Earn $SOBER for Staying Sober',
     description:
-      'Get rewarded for staying sober. Complete tasks, earn SOL directly to your Solana wallet.',
+      'Get rewarded for staying sober. Complete tasks, earn $SOBER directly to your Solana wallet.',
     type: 'website',
     locale: 'en_US',
     siteName: 'SOBER MADE FUN',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'SOBER MADE FUN | Earn SOL for Staying Sober',
+    title: 'SOBER MADE FUN | Earn $SOBER for Staying Sober',
     description:
-      'Get rewarded for staying sober. Complete tasks, earn SOL.',
+      'Get rewarded for staying sober. Complete tasks, earn $SOBER.',
   },
   robots: {
     index: true,
