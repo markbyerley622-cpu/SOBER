@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { Card, SolanaLogo } from '../ui';
+import { Card } from '../ui';
 
 const steps = [
   {
@@ -116,7 +116,7 @@ const HowItWorks: React.FC = () => {
 
           <div className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl bg-[#D6B37A]/5 border border-[#D6B37A]/20">
             <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#D6B37A]/20 flex items-center justify-center flex-shrink-0">
-              <SolanaLogo size={20} />
+              <Image src="/coin logo.png" alt="$SOBER" width={24} height={24} className="rounded-full" />
             </div>
             <div className="min-w-0">
               <h4 className="text-[#EFE6D1] font-medium text-sm sm:text-base font-display">Auto-Sent Rewards</h4>

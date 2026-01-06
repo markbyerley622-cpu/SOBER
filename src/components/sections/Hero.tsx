@@ -137,7 +137,7 @@ const Hero: React.FC = () => {
                   <div className="mt-4 pt-4 border-t border-[#EFE6D1]/10">
                     <div className="text-sm text-[#D6B37A]">
                       <span className="text-[#EFE6D1] font-medium">{userStats.tasksUntilNextTier}</span> more tasks to unlock{' '}
-                      <span className="text-[#F4C430]">next tier</span> (up to {formatSOL(userStats.maxRewardMultiplier)} $SOBER/task)
+                      <span className="text-[#F4C430]">next tier</span>
                     </div>
                   </div>
                 )}
