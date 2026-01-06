@@ -4,7 +4,7 @@ import { AppProvider } from '@/context/AppContext';
 import './globals.css';
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://sober-app.vercel.app'),
+  metadataBase: new URL('https://www.sobermade.fun'),
   title: 'SOBER MADE FUN | Earn $SOBER for Staying Sober',
   description:
     'Get rewarded for staying sober. Complete tasks, earn $SOBER directly to your Solana wallet, and join a supportive community on your wellness journey. Privacy-first, community-driven.',
@@ -27,12 +27,21 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     siteName: 'SOBER MADE FUN',
+    images: [
+      {
+        url: '/coin-logo.png',
+        width: 512,
+        height: 512,
+        alt: '$SOBER Token Logo',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'SOBER MADE FUN | Earn $SOBER for Staying Sober',
     description:
       'Get rewarded for staying sober. Complete tasks, earn $SOBER.',
+    images: ['/coin-logo.png'],
   },
   robots: {
     index: true,
